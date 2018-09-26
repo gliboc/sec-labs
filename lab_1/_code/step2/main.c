@@ -62,7 +62,7 @@ void displayDigit(int digit)
     digitalWrite(c, LOW);
   if (digit != 4 && digit != 1 && digit != 7)
     digitalWrite(d, LOW);
-  if (digit == 2 | digit == 6 | digit == 8 | digit == 0)
+  if ((digit == 2) | (digit == 6) | (digit == 8) | (digit == 0))
     digitalWrite(e, LOW);
   if (digit != 1 && digit != 2 && digit != 3 && digit != 7)
     digitalWrite(f, LOW);
@@ -84,11 +84,13 @@ int main(void)
   while(1)
     { 
       digit = (digit + 1) % 10;
-      displayDigit(digit);
 
       if (buttonPressed()) {
         change_state_led();
+        digit = 0;
       }
+
+      displayDigit(digit);
 
       _delay_ms(1000);
       

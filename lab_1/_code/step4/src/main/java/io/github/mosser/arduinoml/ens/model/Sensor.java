@@ -1,17 +1,16 @@
 package io.github.mosser.arduinoml.ens.model;
 
-
 import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
-public class Actuator implements NamedElement, Visitable {
+public class Sensor implements NamedElement, Visitable {
 
     private int pin;
     private String name;
 
-    public Actuator() {}
+    public Sensor() {}
 
-    public Actuator(String name, int pin) {
+    public Sensor(String name, int pin) {
       this.name = name;
       this.pin = pin;
     }
@@ -22,11 +21,6 @@ public class Actuator implements NamedElement, Visitable {
 
     public void setPin(int pin) {
         this.pin = pin;
-    }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visit(this);
     }
 
 
@@ -40,5 +34,9 @@ public class Actuator implements NamedElement, Visitable {
         this.name = name;
     }
 
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 
 }

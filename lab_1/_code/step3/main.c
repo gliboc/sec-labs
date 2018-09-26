@@ -3,11 +3,17 @@
 #include <Arduino.h>
 #include <fsm.h>
 
+
 // ########## INITIALIZATION #############
 
 
 void init_led() { pinMode(13, OUTPUT); }
 void init_button() { pinMode(10, INPUT); }
+void init_sevenSeg() { 
+  for (int a = 1; a < 8; a++) {
+    pinMode(a, OUTPUT);
+  }
+}
 
 void setup() {
   init_sevenSeg();
@@ -24,8 +30,13 @@ void change_state_led(){
   led_on = !led_on;
 }
 
-// #### 7 segment helper
 
+// #### 7 segment helper
+void turnOff() {
+  for (int a=1; a < 8; a++) {
+    digitalWrite(a, HIGH);
+  }
+}
 
 void displayDigit(int digit)
 {
@@ -54,6 +65,7 @@ boolean is_present(int messageQueue) { return messageQueue == 1; }
 boolean LED_FLAG   = false;
 boolean RESET_FLAG = false;
 boolean CONST_FLAG = false;
+int counter = 0;
 
 // ##### Message producers
 
@@ -73,6 +85,16 @@ void led_pull() {
   LED_FLAG = 0;        // remove flag
 }
 
+void displayCounter() {
+  displayDigit(counter);
+}
+void incrementCounter() {
+  counter = (counter + 1) % 10;
+}
+void resetCounter() {
+  counter = 0;
+}
+
 void incr_pull() {
   if(!is_present(CONST_FLAG)) { return; }
   displayCounter(); incrementCounter();
@@ -84,6 +106,8 @@ void reset_pull() {
   resetCounter();
   RESET_FLAG = 0;
 }
+
+
 
 int main(void)
 {

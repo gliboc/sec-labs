@@ -9,8 +9,15 @@ public class App implements NamedElement, Visitable {
 
 	private String name;
 	private List<Actuator> actuators = new ArrayList<Actuator>();
+	private List<Sensor> sensors = new ArrayList<Sensor>();
 	private List<State> states = new ArrayList<State>();
 	private State initial;
+
+  public App() {}
+
+  public App(String name) {
+    this.name = name;
+  }
 
 	@Override
 	public String getName() {
@@ -26,8 +33,16 @@ public class App implements NamedElement, Visitable {
 		return actuators;
 	}
 
+	public List<Sensor> getSensors() {
+		return sensors;
+	}
+
 	public void setBricks(List<Actuator> actuators) {
 		this.actuators = actuators;
+	}
+
+	public void setSensors(List<Sensor> sensors) {
+		this.sensors = sensors;
 	}
 
 	public List<State> getStates() {

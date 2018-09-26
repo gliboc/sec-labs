@@ -11,40 +11,49 @@ import java.util.Arrays;
 public class Led {
 
 	public static void main(String[] args) {
-
-
-		Actuator led = new Actuator();
-		led.setName("LED");
-		led.setPin(13);
+		Actuator led = new Actuator("LED", 13);
+    Sensor btn = new Sensor("BTN", 2);
 
 		// Declaring states
-		State on = new State();
-		on.setName("on");
-
-		State off = new State();
-		off.setName("off");
+		State on = new State("on");
+		State off = new State("off");
 
 		// Creating actions
-		Action switchTheLightOn = new Action();
-		switchTheLightOn.setActuator(led);
-		switchTheLightOn.setValue(SIGNAL.HIGH);
-
-		Action switchTheLightOff = new Action();
-		switchTheLightOff.setActuator(led);
-		switchTheLightOff.setValue(SIGNAL.LOW);
+		Action switchTheLightOn = new Action(led, SIGNAL.HIGH);
+		Action switchTheLightOff = new Action(led, SIGNAL.LOW);
 
 		// Binding actions to states
 		on.setActions(Arrays.asList(switchTheLightOn));
 		off.setActions(Arrays.asList(switchTheLightOff));
 
-		// Binding transitions to states
-		on.setNext(off);
-		off.setNext(on);
+    // Creating transitions
+    SensorTransition onToOff = new SensorTransition();
+    onToOff.setTarget(off);
+    onToOff.setSensor(btn);
+    onToOff.setValue(SIGNAL.HIGH);
+
+    SensorTransition offToOn = new SensorTransition();
+    offToOn.setTarget(on);
+    offToOn.setSensor(btn);
+    offToOn.setValue(SIGNAL.HIGH);
+
+    // Using self-transitions for interruptions - should disappear
+    Transition onLoop = new Transition();
+    onLoop.setTarget(on);
+
+    Transition offLoop = new Transition();
+    offLoop.setTarget(off);
+
+    // Adding transitions to states
+    on.setTransitions(Arrays.asList(onToOff, onLoop));
+    off.setTransitions(Arrays.asList(offToOn, offLoop));
 
 		// Building the App
-		App theSwitch = new App();
-		theSwitch.setName("Led!");
+		App theSwitch = new App("ArDUinO ReJuvEnAtIon");
+
 		theSwitch.setBricks(Arrays.asList(led));
+		theSwitch.setSensors(Arrays.asList(btn));
+
 		theSwitch.setStates(Arrays.asList(on, off));
 		theSwitch.setInitial(on);
 

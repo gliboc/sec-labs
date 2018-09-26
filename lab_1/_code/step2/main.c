@@ -62,7 +62,7 @@ void displayDigit(int digit)
     digitalWrite(c, LOW);
   if (digit != 4 && digit != 1 && digit != 7)
     digitalWrite(d, LOW);
-  if (digit == 2 | digit == 6 | digit == 8 | digit == 0)
+  if ((digit == 2) | (digit == 6) | (digit == 8) | (digit == 0))
     digitalWrite(e, LOW);
   if (digit != 1 && digit != 2 && digit != 3 && digit != 7)
     digitalWrite(f, LOW);
@@ -89,13 +89,18 @@ int main(void)
       digitalWrite(a,LOW);
 =======
       digit = (digit + 1) % 10;
-      displayDigit(digit);
 
       if (buttonPressed()) {
         change_state_led();
+        digit = 0;
       }
 
+<<<<<<< HEAD
 >>>>>>> Add code for lab_1 step2
+=======
+      displayDigit(digit);
+
+>>>>>>> Add step 4 led code
       _delay_ms(1000);
       
     }

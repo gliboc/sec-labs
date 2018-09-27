@@ -10,6 +10,7 @@ public class Action implements Visitable {
 
 	private List<SIGNAL> values = new ArrayList<SIGNAL>();
 	private List<Actuator> actuators =  new ArrayList<Actuator>();
+	private SIGNAL value;
 
   public Action() {}
 
@@ -18,12 +19,25 @@ public class Action implements Visitable {
     this.values = values;
   }
 
+  public Action(List<Actuator> actuators, SIGNAL value) {
+    this.actuators = actuators;
+    this.value = value;
+  }
+
 	public List<SIGNAL> getValues() {
 		return values;
 	}
 
-	public void setValue(List<SIGNAL> values) {
+	public void setValues(List<SIGNAL> values) {
 		this.values = values;
+	}
+
+	public void setValue(SIGNAL value) {
+		this.value = value;
+	}
+
+	public SIGNAL getValue() {
+		return value;
 	}
 
 	public List<Actuator> getActuators() {

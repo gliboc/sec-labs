@@ -34,6 +34,7 @@ public class App implements NamedElement, Visitable {
 		return actuators;
 	}
 
+
 	public List<Sensor> getSensors() {
 		return sensors;
 	}

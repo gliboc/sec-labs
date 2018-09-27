@@ -28,7 +28,7 @@ public class ToC extends Visitor<StringBuffer> {
 		c("#include <Arduino.h>");
 		c("#include <fsm.h>");
 		c("");
-
+		c("unsigned long previousMillis = 0;\n"); 
 
 		for (Sensor s : app.getSensors()) {
 			c(String.format("int %s_flag = LOW;", s.getName()));
@@ -67,10 +67,10 @@ public class ToC extends Visitor<StringBuffer> {
 		}
 		c("");
 
-		if (app.getInitial() != null) {
+		if (funion.getInitial() != null) {
 			c("int main(void) {");
 			c("  setup();");
-			c(String.format("  state_%s();", app.getInitial().getName()));
+			c(String.format("  state_%s();", funion.getInitial().getName()));
 			// c("  return 0;");
 			c("}");
 		}
@@ -97,7 +97,7 @@ public class ToC extends Visitor<StringBuffer> {
 		for (Transition transition : state.getTransitions()) {
 			transition.accept(this);
 		}
-
+		c(String.format("  state_%s();", state.getName()));
 		c("}");
 	}
 
@@ -125,8 +125,11 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(DelayedTransition transition) {
-		c(String.format("_delay_ms(%d);", transition.getDelay()));
-		c(String.format("  state_%s();", transition.getTarget().getName()));
+		c("  unsigned long currentMillis = millis();");
+		c(String.format("  if ((unsigned long)(currentMillis - previousMillis) >= %s) {", transition.getDelay()));
+		c("    previousMillis = currentMillis;");
+		c(String.format("    state_%s();", transition.getTarget().getName()));
+		c("  }");
 	}
 
 	@Override

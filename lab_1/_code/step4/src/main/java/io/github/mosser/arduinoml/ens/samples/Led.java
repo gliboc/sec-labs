@@ -3,12 +3,17 @@ package io.github.mosser.arduinoml.ens.samples;
 import io.github.mosser.arduinoml.ens.model.*;
 import io.github.mosser.arduinoml.ens.generator.*;
 
+import java.awt.font.NumericShaper.Range;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Delayed;
+
+import org.omg.CORBA.Any;
 
 public class Led {
 
@@ -96,6 +101,59 @@ public class Led {
         offToOn.setSensor(btn);
         offToOn.setValue(SIGNAL.HIGH);
 
+        DelayedTransition onToOffBlink = new DelayedTransition();
+        onToOffBlink.setTarget(off);
+        onToOffBlink.setDelay(500);
+
+        DelayedTransition offToOnBlink = new DelayedTransition();
+        offToOnBlink.setTarget(on);
+        offToOnBlink.setDelay(500);
+
+        SensorTransition resetCounter = new SensorTransition();
+        resetCounter.setTarget(zero);
+        resetCounter.setSensor(btn);
+        resetCounter.setValue(SIGNAL.LOW);
+
+        DelayedTransition incrZero = new DelayedTransition();
+        incrZero.setTarget(one);
+        incrZero.setDelay(500);
+
+        DelayedTransition incrOne = new DelayedTransition();
+        incrOne.setTarget(two);
+        incrOne.setDelay(500);
+
+        DelayedTransition incrTwo = new DelayedTransition();
+        incrTwo.setTarget(three);
+        incrTwo.setDelay(500);
+
+        DelayedTransition incrThree = new DelayedTransition();
+        incrThree.setTarget(four);
+        incrThree.setDelay(500);
+
+        DelayedTransition incrFour = new DelayedTransition();
+        incrFour.setTarget(five);
+        incrFour.setDelay(500);
+
+        DelayedTransition incrFive = new DelayedTransition();
+        incrFive.setTarget(six);
+        incrFive.setDelay(500);
+
+        DelayedTransition incrSix= new DelayedTransition();
+        incrSix.setTarget(seven);
+        incrSix.setDelay(500);
+
+        DelayedTransition incrSeven = new DelayedTransition();
+        incrSeven.setTarget(eight);
+        incrSeven.setDelay(500);
+
+        DelayedTransition incrEight = new DelayedTransition();
+        incrEight.setTarget(nine);
+        incrEight.setDelay(500);
+
+        DelayedTransition incrNine = new DelayedTransition();
+        incrNine.setTarget(zero);
+        incrNine.setDelay(500);
+
         // Using self-transitions for interruptions - should disappear
         Transition onLoop = new Transition();
         onLoop.setTarget(on);
@@ -104,13 +162,21 @@ public class Led {
         offLoop.setTarget(off);
 
         // Adding transitions to states
-        on.setTransitions(Arrays.asList(onToOff, onLoop));
-        off.setTransitions(Arrays.asList(offToOn, offLoop));
+        on.setTransitions(Arrays.asList(onToOff, onToOffBlink));
+        off.setTransitions(Arrays.asList(offToOn, offToOnBlink));
+
+        // 
+        List<State> numerals = Arrays.asList(one, two, three, four, five, six, seven, eight, nine, zero);
+        List<DelayedTransition> incrementals = Arrays.asList(incrOne, incrTwo, incrThree, incrFour, incrFive, incrSix, incrSeven, incrEight, incrNine, incrZero);
+
+        for (int i = 0; i < numerals.size(); i++) {
+            numerals.get(i).setTransitions(Arrays.asList(resetCounter, incrementals.get(i)));
+        }
 
             // Building the App
             App theSwitch = new App("ArDUinO ReJuvEnAtIon");
 
-            theSwitch.setBricks(Arrays.asList(led));
+            theSwitch.setBricks(Arrays.asList(led, a, b, c, d, e, f, g));
             theSwitch.setSensors(Arrays.asList(btn));
 
             theSwitch.setFsm(Arrays.asList(blinkingLed, sevenSeg));

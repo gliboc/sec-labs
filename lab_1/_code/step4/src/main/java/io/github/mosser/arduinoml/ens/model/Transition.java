@@ -17,6 +17,8 @@ public class Transition implements Visitable {
 		return target;
 	}
 
+
+
 	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);

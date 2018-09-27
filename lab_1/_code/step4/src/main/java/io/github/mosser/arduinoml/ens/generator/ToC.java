@@ -105,8 +105,15 @@ public class ToC extends Visitor<StringBuffer> {
 	public void visit(Action action) {
 		for (int i = 0; i < action.getActuators().size(); i++) { 
 			int pin = action.getActuators().get(i).getPin();
-			SIGNAL value = action.getValues().get(i);
-		
+			SIGNAL value;
+
+			if (action.getValues().size() < action.getActuators().size()) {
+				value = action.getValue();
+			}
+			else {
+				value = action.getValues().get(i);
+			}
+			
 			c(String.format("  digitalWrite(%d,%s);", pin, value));
 		}
 	}

@@ -58,12 +58,32 @@ public class Led {
 		Action switchTheLightOn = new Action(Arrays.asList(led), Arrays.asList(SIGNAL.HIGH));
         Action switchTheLightOff = new Action(Arrays.asList(led), Arrays.asList(SIGNAL.LOW));
         
-        Action turnOff = new Action(Arrays.asList(a,b,c,d,e,f,g), 
-            new ArrayList<SIGNAL>(Collections.nCopies(7, SIGNAL.HIGH)));
+        Action turnOff = new Action(Arrays.asList(a,b,c,d,e,f,g), SIGNAL.HIGH);
+        Action printOne = new Action(Arrays.asList(b,c), SIGNAL.LOW);
+        Action printTwo = new Action(Arrays.asList(a,b,d,e,g), SIGNAL.LOW);
+        Action printThree = new Action(Arrays.asList(a,b,c,d,g), SIGNAL.LOW);
+        Action printFour = new Action(Arrays.asList(b,c,f,g), SIGNAL.LOW);
+        Action printFive = new Action(Arrays.asList(a,c,d,f,g), SIGNAL.LOW);
+        Action printSix = new Action(Arrays.asList(a,c,d,e,f,g), SIGNAL.LOW);
+        Action printSeven = new Action(Arrays.asList(a,b,c), SIGNAL.LOW);
+        Action printEight = new Action(Arrays.asList(a,b,c,d,e,f,g), SIGNAL.LOW);
+        Action printNine = new Action(Arrays.asList(a,b,c,d,e,g), SIGNAL.LOW);
+        Action printZero = new Action(Arrays.asList(a,b,c,d,e,f), SIGNAL.LOW);
 
 		// Binding actions to states
 		on.setActions(Arrays.asList(switchTheLightOn));
-		off.setActions(Arrays.asList(switchTheLightOff));
+        off.setActions(Arrays.asList(switchTheLightOff));
+        
+        one.setActions(Arrays.asList(turnOff,printOne));
+        two.setActions(Arrays.asList(turnOff,printTwo));
+        three.setActions(Arrays.asList(turnOff,printThree));
+        four.setActions(Arrays.asList(turnOff,printFour));
+        five.setActions(Arrays.asList(turnOff,printFive));
+        six.setActions(Arrays.asList(turnOff,printSix));
+        seven.setActions(Arrays.asList(turnOff,printSeven));
+        eight.setActions(Arrays.asList(turnOff,printEight));
+        nine.setActions(Arrays.asList(turnOff,printNine));
+        zero.setActions(Arrays.asList(turnOff,printZero));
 
         // Creating transitions
         SensorTransition onToOff = new SensorTransition();

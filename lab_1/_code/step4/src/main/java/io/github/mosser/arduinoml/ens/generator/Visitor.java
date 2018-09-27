@@ -12,7 +12,7 @@ public abstract class Visitor<T> {
 	public abstract void visit(Transition transition);
 	public abstract void visit(DelayedTransition transition);
 	public abstract void visit(SensorTransition transition);
-	// public abstract void visit(Fsm fsm);
+	public abstract void visit(Fsm fsm);
 
 	/***********************
 	 ** Helper mechanisms **

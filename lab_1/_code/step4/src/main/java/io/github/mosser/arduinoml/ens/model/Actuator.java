@@ -4,6 +4,9 @@ package io.github.mosser.arduinoml.ens.model;
 import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Actuator implements NamedElement, Visitable {
 
     private int pin;
@@ -28,7 +31,6 @@ public class Actuator implements NamedElement, Visitable {
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
-
 
     @Override
     public String getName() {

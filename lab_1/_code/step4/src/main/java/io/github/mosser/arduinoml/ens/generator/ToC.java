@@ -29,6 +29,7 @@ public class ToC extends Visitor<StringBuffer> {
 		c("#include <fsm.h>");
 		c("");
 
+
 		for (Sensor s : app.getSensors()) {
 			c(String.format("int %s_flag = LOW;", s.getName()));
 		}
@@ -53,11 +54,18 @@ public class ToC extends Visitor<StringBuffer> {
 				s.getPin(), s.getName()));
 		}
 		c("}\n");
+		
+		Fsm funion = app.getFsm().get(0);
 
-		for (State state : app.getStates()) {
+		for (Fsm fsm : app.getFsm()) {
+			funion = funion.fusion(funion, fsm);
+		}
+
+		for (State state : funion.getStates()) {
 			h(String.format("void state_%s();", state.getName()));
 			state.accept(this);
 		}
+		c("");
 
 		if (app.getInitial() != null) {
 			c("int main(void) {");
@@ -95,7 +103,12 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override
 	public void visit(Action action) {
-		c(String.format("  digitalWrite(%d,%s);", action.getActuator().getPin(), action.getValue()));
+		for (int i = 0; i < action.getActuators().size(); i++) { 
+			int pin = action.getActuators().get(i).getPin();
+			SIGNAL value = action.getValues().get(i);
+		
+			c(String.format("  digitalWrite(%d,%s);", pin, value));
+		}
 	}
 
 	@Override
@@ -117,10 +130,11 @@ public class ToC extends Visitor<StringBuffer> {
 		// transition.getValue()));
 		// c(String.format(" state_%s();", transition.getTarget().getName()));
 		// c(" }");
-		c(String.format("    if (%s == %s) {", flagName, transition.getValue()));
-		c(String.format("      %s = !%s;", flagName, flagName));
-		c(String.format("      state_%s();", transition.getTarget().getName()));
-		c("    }");
+		c(String.format("  if (%s == %s) {", flagName, transition.getValue()));
+		c(String.format("    %s = !%s;", flagName, flagName));
+		c(String.format("    state_%s();", transition.getTarget().getName()));
+		c("  }");
+		
 	}
 
 }

@@ -10,7 +10,8 @@ public class App implements NamedElement, Visitable {
 	private String name;
 	private List<Actuator> actuators = new ArrayList<Actuator>();
 	private List<Sensor> sensors = new ArrayList<Sensor>();
-	private List<State> states = new ArrayList<State>();
+	private List<Fsm> fsm = new ArrayList<Fsm>();
+	// private List<State> states = new ArrayList<State>();
 	private State initial;
 
   public App() {}
@@ -45,12 +46,20 @@ public class App implements NamedElement, Visitable {
 		this.sensors = sensors;
 	}
 
-	public List<State> getStates() {
-		return states;
-	}
+	// public List<State> getStates() {
+	// 	return states;
+	// }
 
-	public void setStates(List<State> states) {
-		this.states = states;
+	// public void setStates(List<State> states) {
+	// 	this.states = states;
+	// }
+
+	public void setFsm(List<Fsm> fsm) {
+		this.fsm = fsm;
+	}
+	
+	public List<Fsm> getFsm() {
+		return fsm;
 	}
 
 	public State getInitial() {

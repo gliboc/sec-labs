@@ -4,32 +4,78 @@ abstract class NamedElement {
  + String name
 }
 
-class App
+
+
+class App 
+
+class Sensor {
+  + int pin
+  + SIGNAL signal
+}
 
 class Actuator {
   + int pin
 }
 
-class State
+class State {
+  + List<Transition> transitions
+}
 
 class Action {
+  + List<Actuators> actuators
+  + List<SIGNAL> values
   + SIGNAL value
 }
+
+class Date << (D,orchid) >>
+
+class Date {
+  + unsigned long millis()
+}
+
+Date --> DelayedTransition
+
+abstract class Transition {
++ State target
+}
+
+class DelayedTransition  {
+  + int delay
+}
+
+class SensorTransition {
+  + Sensor sensor
+}
+
+class Fsm {
+  + List<State> states
+}
+
 
 enum SIGNAL {
     HIGH
     LOW
 }
+  
+Transition <|-- DelayedTransition
+Transition <|-- SensorTransition
+
 
 
 NamedElement <|-- App
 NamedElement <|-- Actuator
 NamedElement <|-- State
+NamedElement <|-- Fsm
+NamedElement <|-- Sensor
 
-App *--> "1..*\nstates" State
+App *--> "1..*\nsensors" Sensor
+App *--> "1..*\nfinite state\nmachines" Fsm
+Fsm *--> "1..*\nstates" State
 App *--> "1..*\nactuators" Actuator
-State --> "next" State
 State *--> "1..*\nactions" Action
-Action --> "1 target" Actuator
+State --> "1..*\ntransitions" Transition
+Action --> "1..*\ntargets" Actuator
+Transition --> "1 target" State
+Sensor --> "1 target" SensorTransition
 
 @enduml

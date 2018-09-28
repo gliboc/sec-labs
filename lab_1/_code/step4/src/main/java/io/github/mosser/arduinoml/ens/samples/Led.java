@@ -72,7 +72,7 @@ public class Led {
         Action printSix = new Action(Arrays.asList(a,c,d,e,f,g), SIGNAL.LOW);
         Action printSeven = new Action(Arrays.asList(a,b,c), SIGNAL.LOW);
         Action printEight = new Action(Arrays.asList(a,b,c,d,e,f,g), SIGNAL.LOW);
-        Action printNine = new Action(Arrays.asList(a,b,c,d,e,g), SIGNAL.LOW);
+        Action printNine = new Action(Arrays.asList(a,b,c,d,f,g), SIGNAL.LOW);
         Action printZero = new Action(Arrays.asList(a,b,c,d,e,f), SIGNAL.LOW);
 
 		// Binding actions to states

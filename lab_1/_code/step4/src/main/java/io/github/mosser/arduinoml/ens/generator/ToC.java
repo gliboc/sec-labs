@@ -69,6 +69,7 @@ public class ToC extends Visitor<StringBuffer> {
 
 		if (funion.getInitial() != null) {
 			c("int main(void) {");
+			c("  init();");
 			c("  setup();");
 			c(String.format("  state_%s();", funion.getInitial().getName()));
 			// c("  return 0;");

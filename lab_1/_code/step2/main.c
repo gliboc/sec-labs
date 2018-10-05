@@ -83,11 +83,6 @@ int main(void)
   int digit = 0;
   while(1)
     { 
-<<<<<<< HEAD
-      // displayDigit(0); // uncomment to test
-      change_state_led();
-      digitalWrite(a,LOW);
-=======
       digit = (digit + 1) % 10;
 
       if (buttonPressed()) {
@@ -95,12 +90,7 @@ int main(void)
         digit = 0;
       }
 
-<<<<<<< HEAD
->>>>>>> Add code for lab_1 step2
-=======
       displayDigit(digit);
-
->>>>>>> Add step 4 led code
       _delay_ms(1000);
       
     }

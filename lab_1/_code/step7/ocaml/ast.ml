@@ -1,10 +1,11 @@
+
 type actuator = {
     name: string; 
     pin: int
-} [@@deriving make]
+} [@@deriving show,make]
 
 type actuators = actuator list
-
+[@@deriving show]
 
 type pin = int
 type signal = Low | High
@@ -28,7 +29,19 @@ type state = {
 } [@@deriving show,make]
 
 type states = state list 
-
+[@@deriving show]
  
-type t = App of string * actuators * state * states
-[@deriving show]
+type app = {
+    name:string;
+    actuators: actuators;
+    initial: state;
+    states: states
+} [@@deriving show,make]
+
+
+
+
+
+
+
+

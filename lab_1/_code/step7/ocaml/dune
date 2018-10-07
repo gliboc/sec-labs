@@ -12,4 +12,4 @@
     (targets parser.ml parser.mli)
     (deps parser.mly)
     (action (chdir %{workspace_root}
-                (run %{bin:menhir} %{deps}))))
+                (run %{bin:menhir} --trace %{deps}))))

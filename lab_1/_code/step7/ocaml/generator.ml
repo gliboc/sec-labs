@@ -5,18 +5,22 @@ let code : string Queue.t = Queue.create ()
 let c : string -> unit = fun s -> Queue.add s code
 
 exception Actuator_not_found
+exception State_not_found
 
-let rec find_actuator : actuators -> string -> (actuator, exn) result = fun acts name ->
+let rec find_actuator : app -> string -> (actuator, exn) result = fun acts name ->
     match acts with
         | [] -> Error Actuator_not_found
         | a :: tl -> if a.name = name then Ok a else find_actuator tl name 
+
+let rec find_state : states -> string -> (state, exn) result = fun states name ->
+    match states with
+        | [] -> Error State_not_found
+        | a :: tl -> if a.name = name then Ok a else find_state tl name
         
 
-let rec gen : t -> unit = fun t ->
-    match t with
-    | App (name, actuators, initial, states) -> 
+let rec gen : app -> unit = fun app ->
+    let (name, actuators, initial, states) = app.contents in
         
-
         c("// C code generated from an object model");
 		c(Printf.sprintf "// Application name: %s\n" name);
 		c("#include <avr/io.h>");
@@ -28,7 +32,7 @@ let rec gen : t -> unit = fun t ->
         gen_actuators(actuators);
         c("}\n");
 
-        gen_states actuators states;
+        gen_states app states;
         
 		c("int main(void) {");
 		c("  setup();");
@@ -36,29 +40,33 @@ let rec gen : t -> unit = fun t ->
 		c("  return 0;");
 		c("}");
 
-and gen_actuators : actuators -> unit = function 
+and gen_actuators : actuators -> unit = function
     | [] -> ()
     | act :: acts -> gen_actuator act ; gen_actuators acts   
 
 and gen_actuator : actuator -> unit = fun actuator ->
     c(Printf.sprintf "  pinMode(%d, OUTPUT); // %s [Actuator]" actuator.pin actuator.name)
 
-and gen_states : actuators -> states -> unit = fun actuators -> function
+and gen_states : app -> states -> unit = fun app -> function
     | [] -> ()
     | s :: states -> gen_state actuators s ; gen_states actuators states
 
-and gen_state : actuators -> state -> unit = fun actuators s ->
+and gen_state : app -> state -> unit = fun app s ->
         c(Printf.sprintf "void state_%s() {" s.name);
-        gen_actions actuators s.actions;
+        gen_actions app s.actions;
 		c("  _delay_ms(1000);");
-		c(Printf.sprintf "  state_%s();" s.next.name);
+		c(Printf.sprintf "  state_%s();" 
+            begin match (find_state app.states s.next) with 
+                | Ok state -> state.name 
+                | Error e -> raise e
+            end);
 		c("}");
 
-and gen_actions : actuators -> actions -> unit = fun actuators -> function 
+and gen_actions : app -> actions -> unit = fun app -> function 
     | [] -> ()
-    | action :: actions -> gen_action actuators action ; gen_actions actuators actions 
+    | action :: actions -> gen_action app action ; gen_actions app actions 
 
-and gen_action : actuators -> action -> unit = fun actuators action ->
+and gen_action : app -> action -> unit = fun actuators action ->
     match find_actuator actuators action.actuator with
     | Ok actuator -> 
         c(Printf.sprintf "  digitalWrite(%d,%s);" actuator.pin (string_of_signal(action.value)))

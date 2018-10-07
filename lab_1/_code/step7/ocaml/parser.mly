@@ -4,32 +4,31 @@ open Ast
 
 %token APPLICATION
 %token ACTUATOR
-%token <int> LOCATION SIGNAL
+%token <int> LOCATION
 %token INITIAL
 %token COLON
-%token <string> ID
+%token <string> ID IDCOLON
 %token LBRACKET RBRACKET
 %token IS
-%token EOF EOL
+%token EOL EOF
+%token LOW HIGH
+%token GOTO
 
 %start main
-%type <Ast.t> main
+%type <Ast.app> main
 
 %% 
 
 main:
-    | q = app  EOF                                    { q }
-
-app:
-    | APPLICATION name=ID actuas=actuators i=initial s=states    { App ( name, actuas, i, i :: s ) }
+    | APPLICATION n=ID LBRACKET 
+    a=actuators i=initial s=states RBRACKET EOF   { make_app ~name:n ~actuators:a ~initial:i ~states:(i :: s) }
  
 actuators:
-    |                                                   { [] }
     | a=actuator                                        { [a] }
     | a=actuator EOL actuas=actuators                       { a :: actuas }
 
 actuator:
-    | ACTUATOR id=ID COLON pin=LOCATION                 { make_actuator id pin }
+    | ACTUATOR id=IDCOLON pin=LOCATION                 { make_actuator ~name:id ~pin:pin }
 
 states:
     | s=state                                           { [s] }
@@ -37,10 +36,10 @@ states:
 
 
 initial:
-    | INITIAL name=ID LBRACKET acts=actions next=ID RBRACKET  { make_state name acts next }
+    | INITIAL s=state                                       { s }
 
 state:
-    | name=ID LBRACKET acts=actions next=ID RBRACKET          { make_state name acts next }
+    | name=ID LBRACKET acts=actions GOTO next=ID RBRACKET          { make_state ~name:name ~actions:acts ~next:next }
 
 
 actions:
@@ -48,4 +47,8 @@ actions:
     | a=action EOL acts=actions                                { a :: acts }
 
 action:
-    | receiver=ID IS value=SIGNAL                            { (receiver, value) }
+    | r=ID IS v=signal                                      { make_action ~actuator:r ~value:v ~values:[] () }
+
+signal:
+    | LOW                                                    { Low }
+    | HIGH                                                   { High }

@@ -1,5 +1,5 @@
 {
-  open Parser     
+  open Parser  
   exception Bad_token of string
 
 let incr_linenum lexbuf =
@@ -11,18 +11,19 @@ let incr_linenum lexbuf =
 }
 
 rule token = parse 
-    | [' ' '\t' ]  { token lexbuf }
-    | '\n' {incr_linenum lexbuf; token lexbuf}
- 	     	   	           (* token: appel récursif *)
-                                   (* lexbuf: argument implicite
-                                      associé au tampon où sont
-                                      lus les caractères *)
-    | '\n'              { EOL }
-    | "application"     { APPLICATION }
-    | "{"               { LBRACKET }
-    | "}"               { RBRACKET }
-    | "is"              { IS }
-    | "actuator"        { ACTUATOR }
-    | "->"              { INITIAL }
-    | eof        { EOF }
-    | _          { raise (Bad_token (Lexing.lexeme lexbuf)) }
+    | [' ' '\t' ]                                      { token lexbuf }    
+    | [ '\n' ]                                              { incr_linenum lexbuf; token lexbuf }
+    | "application"                                         { APPLICATION }
+    | "{"                                                   { LBRACKET }
+    | "}"                                                   { RBRACKET }
+    | "is"                                                  { IS }
+    | "actuator"                                            { ACTUATOR }
+    | "->"                                                  { INITIAL }
+    | "low" | "LOW"                                               { LOW }
+    | "high" | "HIGH"                                              { HIGH }
+    | "goto"                                                { GOTO }
+    | eof                                                   { EOF }
+    | ['0'-'9']* as n                                       { LOCATION (int_of_string n) }
+    | ['a'-'z']['0'-'9''a'-'z''A'-'Z''_']*'\''* +':' as s   { IDCOLON (List.hd (String.split_on_char ':' s)) }
+    | ['a'-'z']['0'-'9''a'-'z''A'-'Z''_']*'\''* as s        {ID (s)}
+    | _                                                     { raise (Bad_token (Lexing.lexeme lexbuf)) }

@@ -1,23 +1,28 @@
 {
-    open Parser
-    exception Bad_token of string
+  open Parser     
+  exception Bad_token of string
+
+let incr_linenum lexbuf =
+    let pos = lexbuf.Lexing.lex_curr_p in
+    lexbuf.Lexing.lex_curr_p <- {pos with
+        Lexing.pos_lnum = pos.Lexing.pos_lnum + 1;
+        Lexing.pos_bol = pos.Lexing.pos_cnum;
+    }
 }
 
 rule token = parse 
-    | [' ' '\t' '\n' ]  { token lexbuf }
+    | [' ' '\t' ]  { token lexbuf }
+    | '\n' {incr_linenum lexbuf; token lexbuf}
+ 	     	   	           (* token: appel récursif *)
+                                   (* lexbuf: argument implicite
+                                      associé au tampon où sont
+                                      lus les caractères *)
+    | '\n'              { EOL }
     | "application"     { APPLICATION }
+    | "{"               { LBRACKET }
+    | "}"               { RBRACKET }
+    | "is"              { IS }
     | "actuator"        { ACTUATOR }
     | "->"              { INITIAL }
     | eof        { EOF }
     | _          { raise (Bad_token (Lexing.lexeme lexbuf)) }
-
-and read_string buf = parse
-  | '"'        { STRING (Buffer.contents buf) }
-  | "\\\\"     { Buffer.add_char buf '\\'; read_string buf lexbuf }
-  | "\\t"      { Buffer.add_char buf '\t'; read_string buf lexbuf }
-  | "\\\""     { Buffer.add_char buf '"'; read_string buf lexbuf }
-  | "\\r"      { Buffer.add_char buf '\r'; read_string buf lexbuf }
-  | "\\n"      { Buffer.add_char buf '\n'; read_string buf lexbuf }
-  | [^ '"' '\\' ] {Buffer.add_string buf (Lexing.lexeme lexbuf); read_string buf lexbuf }
-  | _          { raise (Bad_token ("Illegal string character: " ^ Lexing.lexeme lexbuf)) }
-  | eof        { raise (Bad_token ("String not terminated")) }

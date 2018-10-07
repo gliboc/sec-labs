@@ -1,2 +1,15 @@
 (executable 
-    (name generator))
+    (name main)
+    (preprocess (pps ppx_deriving.std)))
+
+(rule 
+    (targets lexer.ml)
+    (deps lexer.mll)
+    (action (chdir %{workspace_root}
+                (run %{bin:ocamllex} %{deps}))))
+
+(rule 
+    (targets parser.ml parser.mli)
+    (deps parser.mly)
+    (action (chdir %{workspace_root}
+                (run %{bin:menhir} %{deps}))))

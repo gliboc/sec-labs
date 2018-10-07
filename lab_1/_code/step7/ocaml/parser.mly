@@ -1,12 +1,16 @@
+%{
+open Ast
+%}
+
 %token APPLICATION
 %token ACTUATOR
 %token <int> LOCATION SIGNAL
-%token STATE
-%token ACTION
-%token NEXT
 %token INITIAL
 %token COLON
 %token <string> ID
+%token LBRACKET RBRACKET
+%token IS
+%token EOF EOL
 
 %start main
 %type <Ast.t> main
@@ -14,30 +18,34 @@
 %% 
 
 main:
-    | q = app EOF                                       { q }
+    | q = app  EOF                                    { q }
 
 app:
-    | APPLICATION as=actuators s=states                 { App( as, s ) }
-
+    | APPLICATION name=ID actuas=actuators i=initial s=states    { App ( name, actuas, i, i :: s ) }
+ 
 actuators:
     |                                                   { [] }
     | a=actuator                                        { [a] }
-    | a=actuator EOL as=actuators                       { a :: as }
+    | a=actuator EOL actuas=actuators                       { a :: actuas }
 
 actuator:
-    | ACTUATOR id=ID COLON pin=LOCATION                 { (id, pin) }
+    | ACTUATOR id=ID COLON pin=LOCATION                 { make_actuator id pin }
 
 states:
     | s=state                                           { [s] }
     | s=state EOL ss=states                             { s :: ss }
 
+
+initial:
+    | INITIAL name=ID LBRACKET acts=actions next=ID RBRACKET  { make_state name acts next }
+
 state:
-    | INITIAL name=ID '{' acts=actions n=next '}'       { Init (name, actions, n) }
-    | name=ID '{' acts=actions n=next '}'               { State (name, actions, n) }
+    | name=ID LBRACKET acts=actions next=ID RBRACKET          { make_state name acts next }
+
 
 actions:
-    | a=action                                          { [a] }
-    | a=action EOL as=actions                           { a :: as }
+    | a=action                                               { [a] }
+    | a=action EOL acts=actions                                { a :: acts }
 
 action:
-    | receiver=ID 'is' value=SIGNAL                     { (receiver, value) }
+    | receiver=ID IS value=SIGNAL                            { (receiver, value) }

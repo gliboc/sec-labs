@@ -4,14 +4,7 @@ let rec f n =
   | _ -> n * f (n-1)
 
 let () = 
-  print_endline @@ "Hello, World!";
-  print_char 'a';
-  (* let (x : bytes) = "101010" in print_bytes x; *) 
-  (* Note : bytes are mutable strings from newer versions*)
-  print_float 0.1;
-  print_int 2;
-  print_string "309FIZJID";
-  print_newline ();
-  prerr_int 0;
-  print_int @@ f 20;
-  print_newline ()
+  let ic = open_in "led.dsl" in 
+  let stream = Lexing.from_channel ic in 
+  let query = Parser.main Lexer.token stream
+  in Printf.printf "%s" (Ast.show query)

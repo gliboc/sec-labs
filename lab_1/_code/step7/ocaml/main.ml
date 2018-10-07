@@ -21,7 +21,8 @@ let treat file =
     let query = Parser.main Lexer.token stream in 
     begin
     if true then Printf.printf "Your query: %s\n" (Ast.show_app query)
-    end
+    end;
+    Generator.write_code query
 
 
 (* let _ = repl true () *)

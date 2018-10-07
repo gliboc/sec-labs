@@ -7,7 +7,7 @@ let c : string -> unit = fun s -> Queue.add s code
 exception Actuator_not_found
 exception State_not_found
 
-let rec find_actuator : app -> string -> (actuator, exn) result = fun acts name ->
+let rec find_actuator : actuators -> string -> (actuator, exn) result = fun acts name ->
     match acts with
         | [] -> Error Actuator_not_found
         | a :: tl -> if a.name = name then Ok a else find_actuator tl name 
@@ -19,7 +19,7 @@ let rec find_state : states -> string -> (state, exn) result = fun states name -
         
 
 let rec gen : app -> unit = fun app ->
-    let (name, actuators, initial, states) = app.contents in
+    let (name, actuators, initial, states) = app.name, app.actuators, app.initial, app.states in
         
         c("// C code generated from an object model");
 		c(Printf.sprintf "// Application name: %s\n" name);
@@ -49,7 +49,7 @@ and gen_actuator : actuator -> unit = fun actuator ->
 
 and gen_states : app -> states -> unit = fun app -> function
     | [] -> ()
-    | s :: states -> gen_state actuators s ; gen_states actuators states
+    | s :: states -> gen_state app s ; gen_states app states
 
 and gen_state : app -> state -> unit = fun app s ->
         c(Printf.sprintf "void state_%s() {" s.name);
@@ -66,8 +66,8 @@ and gen_actions : app -> actions -> unit = fun app -> function
     | [] -> ()
     | action :: actions -> gen_action app action ; gen_actions app actions 
 
-and gen_action : app -> action -> unit = fun actuators action ->
-    match find_actuator actuators action.actuator with
+and gen_action : app -> action -> unit = fun app action ->
+    match find_actuator app.actuators action.actuator with
     | Ok actuator -> 
         c(Printf.sprintf "  digitalWrite(%d,%s);" actuator.pin (string_of_signal(action.value)))
     | Error e -> raise e
@@ -92,11 +92,11 @@ let write_code app =
 
 (* test *)
 
-let led : actuator = {name="led"; pin=13}
+(* let led : actuator = {name="led"; pin=13}
 let switchOn : action = {actuator="led"; value=High; values=[]}
 let switchOff : action = {actuator="led"; value=Low; values=[]}
-let rec on : state = {name="on"; next=off; actions=[switchOn]}
-and off : state = {name="off"; next=on; actions=[switchOff]}
-let app : term = App ("test", [led], on, [on;off])
+let rec on : state = {name="on"; next="off"; actions=[switchOn]}
+and off : state = {name="off"; next="on"; actions=[switchOff]} *)
+(* let app : term = App ("test", [led], on, [on;off]) *)
 
-let () = write_code app
+(* let () = write_code app *)

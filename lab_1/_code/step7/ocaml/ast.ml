@@ -38,9 +38,6 @@ type app = {
     states: states
 } [@@deriving show,make]
 
-String.split_on_char
-String.length
-
 
 
 

@@ -6,7 +6,6 @@ open Ast
 %token ACTUATOR
 %token <int> LOCATION
 %token INITIAL
-%token COLON
 %token <string> ID IDCOLON
 %token LBRACKET RBRACKET
 %token IS

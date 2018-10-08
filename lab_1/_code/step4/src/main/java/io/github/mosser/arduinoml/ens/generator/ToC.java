@@ -148,4 +148,7 @@ public class ToC extends Visitor<StringBuffer> {
 		
 	}
 
+	@Override 
+	public void visit(Fsm fsm) {}
+
 }

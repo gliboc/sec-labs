@@ -49,17 +49,17 @@ trap "exitfn" INT            # Set up SIGINT trap to call function.
 
 if [ "$line" != "O" ]; then
     echo ""
-    echo "Ok, envoi de l'archive à marton.karsai@ens-lyon.fr ..."
+    echo "Ok, envoi de l'archive à laure.gonnord@ens-lyon.fr ..."
     sleep 2s; echo ""
     echo "Rendu effectué !"
     sleep "5s"
     exitfn
 fi
 
-# if [ "$line" = "O" ]; then 
-#     echo "Vraiment ? [O/n]" 
-#     read line2 
-#     if [ "$line2" = "O" ]; then 
+# if [ "$line" = "O" ]; then
+#     echo "Vraiment ? [O/n]"
+#     read line2
+#     if [ "$line2" = "O" ]; then
 #       echo "TODO: configurer mail"
 #     fi
 # fi

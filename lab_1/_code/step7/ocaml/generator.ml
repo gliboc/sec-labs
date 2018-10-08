@@ -7,18 +7,21 @@ let c : string -> unit = fun s -> Queue.add s code
 exception Actuator_not_found
 exception State_not_found
 
-let rec find_actuator : actuators -> string -> (actuator, exn) result = fun acts name ->
+let rec find_actuator : actuators -> string -> (actuator, exn) result = 
+    fun acts name ->
     match acts with
         | [] -> Error Actuator_not_found
         | a :: tl -> if a.name = name then Ok a else find_actuator tl name 
 
-let rec find_state : states -> string -> (state, exn) result = fun states name ->
+let rec find_state : states -> string -> (state, exn) result = 
+    fun states name ->
     match states with
         | [] -> Error State_not_found
         | a :: tl -> if a.name = name then Ok a else find_state tl name
         
 
-let rec gen : app -> unit = fun app ->
+let rec gen : app -> unit = 
+    fun app ->
     let (name, actuators, initial, states) = app.name, app.actuators, app.initial, app.states in
         
         c("// C code generated from an object model");
@@ -40,18 +43,22 @@ let rec gen : app -> unit = fun app ->
 		c("  return 0;");
 		c("}");
 
-and gen_actuators : actuators -> unit = function
+and gen_actuators : actuators -> unit = 
+    function
     | [] -> ()
     | act :: acts -> gen_actuator act ; gen_actuators acts   
 
-and gen_actuator : actuator -> unit = fun actuator ->
+and gen_actuator : actuator -> unit = 
+    fun actuator ->
     c(Printf.sprintf "  pinMode(%d, OUTPUT); // %s [Actuator]" actuator.pin actuator.name)
 
-and gen_states : app -> states -> unit = fun app -> function
+and gen_states : app -> states -> unit = 
+    fun app -> function
     | [] -> ()
     | s :: states -> gen_state app s ; gen_states app states
 
-and gen_state : app -> state -> unit = fun app s ->
+and gen_state : app -> state -> unit = 
+    fun app s ->
         c(Printf.sprintf "void state_%s() {" s.name);
         gen_actions app s.actions;
 		c("  _delay_ms(1000);");
@@ -62,21 +69,25 @@ and gen_state : app -> state -> unit = fun app s ->
             end);
 		c("}");
 
-and gen_actions : app -> actions -> unit = fun app -> function 
+and gen_actions : app -> actions -> unit = 
+    fun app -> function 
     | [] -> ()
     | action :: actions -> gen_action app action ; gen_actions app actions 
 
-and gen_action : app -> action -> unit = fun app action ->
+and gen_action : app -> action -> unit = 
+    fun app action ->
     match find_actuator app.actuators action.actuator with
     | Ok actuator -> 
         c(Printf.sprintf "  digitalWrite(%d,%s);" actuator.pin (string_of_signal(action.value)))
     | Error e -> raise e
 
-and string_of_signal : signal -> string = function 
+and string_of_signal : signal -> string = 
+    function 
     | Low -> "SIGNAL.LOW"
     | High -> "SIGNAL.HIGH"
 
-let write_code app =
+let write_code : app -> unit =
+    fun app ->
     gen app;
     if Queue.is_empty code then
         prerr_endline "Error: the code queue was empty"

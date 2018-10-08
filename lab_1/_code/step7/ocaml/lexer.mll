@@ -11,7 +11,7 @@ let incr_linenum lexbuf =
 }
 
 rule token = parse 
-    | [' ' '\t' ]                                      { token lexbuf }    
+    | [' ' '\t' ]                                           { token lexbuf }    
     | [ '\n' ]                                              { incr_linenum lexbuf; token lexbuf }
     | "application"                                         { APPLICATION }
     | "{"                                                   { LBRACKET }
@@ -19,11 +19,11 @@ rule token = parse
     | "is"                                                  { IS }
     | "actuator"                                            { ACTUATOR }
     | "->"                                                  { INITIAL }
-    | "low" | "LOW"                                               { LOW }
-    | "high" | "HIGH"                                              { HIGH }
+    | "low" | "LOW"                                         { LOW }
+    | "high" | "HIGH"                                       { HIGH }
     | "goto"                                                { GOTO }
     | eof                                                   { EOF }
     | ['0'-'9']* as n                                       { LOCATION (int_of_string n) }
     | ['a'-'z']['0'-'9''a'-'z''A'-'Z''_']*'\''* +':' as s   { IDCOLON (List.hd (String.split_on_char ':' s)) }
-    | ['a'-'z']['0'-'9''a'-'z''A'-'Z''_']*'\''* as s        {ID (s)}
+    | ['a'-'z']['0'-'9''a'-'z''A'-'Z''_']*'\''* as s        { ID (s) }
     | _                                                     { raise (Bad_token (Lexing.lexeme lexbuf)) }

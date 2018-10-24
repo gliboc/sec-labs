@@ -11,7 +11,6 @@ public class App implements NamedElement, Visitable {
 	private List<Actuator> actuators = new ArrayList<Actuator>();
 	private List<Producer> producers = new ArrayList<Producer>();
 	private List<Consumer> consumers = new ArrayList<Consumer>();
-	private List<Fsm> fsm = new ArrayList<Fsm>();
 	// private List<State> states = new ArrayList<State>();
 	private State initial;
 

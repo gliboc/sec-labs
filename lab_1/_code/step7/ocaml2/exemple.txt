@@ -1,0 +1,130 @@
+========================
+Code de la spécification L1
+
+type Pin = Set(1, ..., 16)
+type Signal = high | low
+type Screen = Set(0, ..., 9)
+
+builtin display : int -> actions 
+// ce genre de builtin part dans l'implémentation de G2 
+
+class Register {
+    type t 
+    val value : t
+    val next : unit -> t
+} 
+
+class Actuator {
+    val pin : Pin 
+}
+
+class SetActuator {
+    val set : signal -> actuator -> unit
+}
+
+class SetRegister {
+    val set : signal -> register -> unit
+}
+
+class Consumer {
+    val memory : [Register]
+    val actions : [Actions]
+}
+
+class Producer {
+    val target : Consumer
+}
+
+
+
+======================
+Code [généré] pour G1
+
+type 'a register = { 'a value : 'a ; 'a next : unit -> 'a }
+
+type actions = ...
+
+type consumer = { memory : register list ; actions : actions list }
+
+-> Parser ?
+
+=====================
+Code [généré] pour G2 
+
+-----
+builtins.mli 
+
+val display : int -> actions 
+-----
+
+-----
+codegen.mli
+
+val gen_register : register -> string // la string contient le code C à écrire 
+val gen_consumer : consumer -> string
+val gen_producer : producer -> string
+-----
+
+-----
+codegen.ml 
+
+En gros : visitor pattern + fonction c(gen_register r1) 
+qui écrit le code dans un fichier C
+
+
+======================
+Code de l'application L2
+
+register counter { 
+    type t = Screen
+    let value = 0
+    let next () = put value to (value+1) 
+    let reset () = put value to 0
+}
+
+register btn_pressed {
+    type t = Signal 
+    let value = low 
+    let next () = put value to !value
+}
+
+register reset {
+    type t = Signal 
+    value = low 
+    let next () = put value to !value
+}
+
+actuator btn { pin = 10 }
+
+set_actuator led_on {
+
+}
+
+// Note majeure : il y a une file de message et un pointer
+// donnant le nombre de messages dans la file qui est incrémenté 
+// à chaque fois qu'une clause d'un producer est satisfaite
+
+
+producer interrupt {
+    if (btn_pressed): 
+        put resetDisplay flag to true
+        btn_pressed.next()
+}
+
+producer display {
+    every 500ms: put stepDisplay flag to true
+}
+
+// La liste des consumers est appelée si la file de messages 
+// est non vide, et leur contenu est lancé si leur flag est activé.
+
+consumer resetDisplay {
+    counter.reset()
+}
+
+consumer stepDisplay {
+    display screen "counter"
+    counter.next()
+}
+
+

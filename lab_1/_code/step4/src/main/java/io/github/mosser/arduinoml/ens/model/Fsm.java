@@ -3,7 +3,6 @@ package io.github.mosser.arduinoml.ens.model;
 import io.github.mosser.arduinoml.ens.generator.Visitable;
 import io.github.mosser.arduinoml.ens.generator.Visitor;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class Fsm implements NamedElement, Visitable {
         return new State(); // Should raise an error actually
     }
 
-    public Fsm fusion(Fsm a1, Fsm a2) {
+    public Fsm par_fusion(Fsm a1, Fsm a2) {
 
         if (a1.getName() == a2.getName()) {
             return a1;
@@ -94,47 +93,44 @@ public class Fsm implements NamedElement, Visitable {
         System.out.println(newStates.size());
 
         for (State s1 : a1.getStates()) {
-            for (State s2 : a2.getStates()) { 
-                for (Transition t1 : s1.getTransitions()) {
-                    for (Transition t2 : s2.getTransitions()) {
-                        if ((t1 instanceof DelayedTransition) && (t2 instanceof DelayedTransition)) {
-                            if (((DelayedTransition)t1).getDelay() == ((DelayedTransition)t2).getDelay()) {
+        for (State s2 : a2.getStates()) { 
+            for (Transition t1 : s1.getTransitions()) {
+            for (Transition t2 : s2.getTransitions()) {
+                if ((t1 instanceof DelayedTransition) && (t2 instanceof DelayedTransition)) {
+                    
+                    if (((DelayedTransition)t1).getDelay() == ((DelayedTransition)t2).getDelay()) {
+                        System.out.println("Adding a DelayedTransition");
+                        
+                        DelayedTransition t = new DelayedTransition();
+                        t.setDelay(((DelayedTransition)t1).getDelay());
+                        
+                        State target = a.findState(String.format("%s_%s", t1.getTarget().getName(), t2.getTarget().getName()));
+                        t.setTarget(target);
 
-                                System.out.println("Adding a DelayedTransition");
-                                
-                                DelayedTransition t = new DelayedTransition();
-                                t.setDelay(((DelayedTransition)t1).getDelay());
-                                
-                                State target = a.findState(String.format("%s_%s", t1.getTarget().getName(), t2.getTarget().getName()));
-                                t.setTarget(target);
-
-                                State s = a.findState(String.format("%s_%s", s1.getName(), s2.getName()));
-                                s.addTransition(t);
-                            }
-                        }
-
-                        if ((t1 instanceof SensorTransition) && (t2 instanceof SensorTransition)) {
-                            if (((SensorTransition)t1).getSensor() == ((SensorTransition)t2).getSensor()) {
-
-                                SensorTransition t = new SensorTransition();
-                                t.setValue(((SensorTransition)t1).getValue());
-                                t.setSensor(((SensorTransition)t1).getSensor());
-
-                                State target = a.findState(String.format("%s_%s", t1.getTarget().getName(), t2.getTarget().getName()));
-                                t.setTarget(target);
-
-                                State s = a.findState(String.format("%s_%s", s1.getName(), s2.getName()));
-                                s.addTransition(t);
-
-                                System.out.println(String.format("Adding a SensorTransition to %s", s.getName()));
-
-                            }
-                        }
+                        State s = a.findState(String.format("%s_%s", s1.getName(), s2.getName()));
+                        s.addTransition(t);
                     }
                 }
-                
+                if ((t1 instanceof SensorTransition) && (t2 instanceof SensorTransition)) {
+                    if (((SensorTransition)t1).getSensor() == ((SensorTransition)t2).getSensor()) {
 
+                        SensorTransition t = new SensorTransition();
+                        t.setValue(((SensorTransition)t1).getValue());
+                        t.setSensor(((SensorTransition)t1).getSensor());
+
+                        State target = a.findState(String.format("%s_%s", t1.getTarget().getName(), t2.getTarget().getName()));
+                        t.setTarget(target);
+
+                        State s = a.findState(String.format("%s_%s", s1.getName(), s2.getName()));
+                        s.addTransition(t);
+
+                        System.out.println(String.format("Adding a SensorTransition to %s", s.getName()));
+
+                    }
+                }
             }
+            }
+        }
         }
 
         State i1 = a1.getInitial();

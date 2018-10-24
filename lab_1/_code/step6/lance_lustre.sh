@@ -74,7 +74,7 @@ cd "$NOM"
 export LUSTRE_INSTALL="$(pwd)"
 . ./setenv.sh
 cd ..
-export PS1="###LUSTRE###$ "
+export PS1="lustre # "
 echo "############################################################
 Some Examples
    cd $LUSTRE_INSTALL/examples/     # Official Lustre tests

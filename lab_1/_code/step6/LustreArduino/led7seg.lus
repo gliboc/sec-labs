@@ -2,3 +2,9 @@ node cpt(reset: bool)  returns (led_on: bool) ;
 let
    led_on = false -> not(pre(led_on));
 tel
+
+node button(button_state: bool) returns (led_on: bool) ;
+let 
+    led_on = false -> if button_state then not(pre(led_on)) else pre(led_on);
+tel
+    

@@ -19,9 +19,9 @@ public class Led {
 
 	public static void main(String[] args) {
 		Actuator led = new Actuator("LED", 13);
-        Sensor btn = new Sensor("BTN", 2);
-        Actuator a = new Actuator("a", 8);
-        Actuator b = new Actuator("b", 9);
+        Sensor btn = new Sensor("BTN", 10);
+        Actuator a = new Actuator("a", 1);
+        Actuator b = new Actuator("b", 2);
         Actuator c = new Actuator("c", 3);
         Actuator d = new Actuator("d", 4);
         Actuator e = new Actuator("e", 5);

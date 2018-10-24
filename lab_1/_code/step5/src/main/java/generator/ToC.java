@@ -137,7 +137,7 @@ public class ToC extends Visitor<StringBuffer> {
 	// }
 	@Override 
 	public void visit(Register register) {
-		
+		c(String.format("boolean %s = %s", register.getName(), register.getValue()));
 	}
 
 	@Override 
@@ -145,6 +145,13 @@ public class ToC extends Visitor<StringBuffer> {
 
 	@Override 
 	public void visit(Consumer consumer) {
+		c("// ####### MESSAGE FLAG NETWORK #######\n");
+		c("// Message flags\n");
+
+		for (Register reg : consumer.getMemory()) {
+			this.visit(reg);
+		}
+		c("\n");
 		
 		for (Action action: consumer.getActions()) {
 			this.visit(action);

@@ -1,0 +1,36 @@
+type Pin = Set(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+type Signal = High | Low
+type ScreenState = Set(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+
+class Register (T: type) { value : T }
+
+class Actuator { pin : Pin }
+class Sensor { pin : Pin }
+class SevenSeg { pins : [Pin; 7] }
+
+union Action {
+  display (value: ScreenState) on (screen: SevenSeg)
+  set (actuator: Actuator) to (value: Signal)
+  set (register: Register(T)) to (value: T)
+}
+
+class Consumer {
+  memory : [Register]
+  actions : [Actions]
+}
+
+constructor Sensor (pin: Pin)
+constructor Actuator (pin: Pin)
+constructor SevenSeg (pins: [Pin; 8])
+
+constructor State (name: Identifier, actions: [Action])
+
+composite Fsm {
+  Fsm (states: [State])
+  Fsm_parallel (a: Fsm, b: Fsm)
+  Fsm_sequential (a: Fsm, b: Fsm)
+}
+
+Register (ScreenState) counter { value = 0 }
+
+

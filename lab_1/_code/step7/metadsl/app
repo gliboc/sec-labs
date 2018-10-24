@@ -1,0 +1,21 @@
+Register(ScreenState) counter { value := 0 }
+Register(Signal) btn_pressed { value := Low }
+Register (Signal) reset { value := Low }
+
+Sensor btn { pin = 10 }
+Actuator led { pin = 10 }
+
+Producer interrupt {
+  if (btn_pressed.value == High) {
+    flag resetDisplay
+  }
+}
+
+Consumer resetDisplay {
+  set counter to 0
+}
+
+Consumer stepDisplay {
+  display counter.value to screen
+  set counter to (counter.value + 1)
+}

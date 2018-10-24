@@ -1,0 +1,77 @@
+@startuml
+
+' DSL are with squares
+' Embedded are with circles
+' Compilers / Transpilers are with : ?
+
+class Abstract <<(L,orchid)>> {
+    - Specification language L1
+}
+
+Abstract -> Visualization
+(Abstract, Visualization) . SeeUML
+SeeUML --|>Transpiler 
+
+class SeeUML <<(P,orange)>> {
+    projection : L1 🡒 PlantUML
+}
+
+
+
+
+class AST <<(E,lightgreen)>> {
+    + Ocaml
+}
+
+AST --|> MetaModel : "types"
+
+
+class Visualization <<(L,orchid)>> {
+    - UML diagrams
+}
+
+
+class Executable <<(E,lightgreen)>> {
+    + Arduino C
+}
+
+class Storage << (L,orchid) >> {
+    - Implementation language L2
+}
+
+class "Angstrom G0" <<(P,orange)>> {
+    lexer/parser : L1 🡒 MetaModel
+}
+
+"Angstrom G0" --|> Transpiler 
+
+class MetaModel <<(R,red)>> {
+    terms description
+    type constraints
+}
+
+Abstract -> MetaModel
+(Abstract, MetaModel) . "Angstrom G0"
+
+class "Editable G1" <<(P,orange)>> {
+    lexer/parser : L2 🡒 AST
+}
+
+class G2 <<(P,orange)>> {
+    compiler : AST 🡒 C
+}
+
+abstract class Transpiler {
+    fun : Σ* 🡒 Σ*
+}
+
+Transpiler <|-- G2 
+Transpiler <|-- "Editable G1" 
+Storage -> AST 
+(Storage, AST) . "Editable G1"
+AST -> Executable
+(AST, Executable) . G2
+
+MetaModel <|-- Storage : "terms"
+
+@enduml

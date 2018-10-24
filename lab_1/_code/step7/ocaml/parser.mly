@@ -20,8 +20,9 @@ open Ast
 
 main:
     | APPLICATION n=ID LBRACKET 
-      a=actuators i=initial s=states RBRACKET EOF            { make_app ~name:n ~actuators:a ~initial:i ~states:(i :: s) }
- 
+        a=actuators i=initial s=states 
+        RBRACKET EOF                                         { make_app ~name:n ~actuators:a ~initial:i ~states:(i :: s) }
+
 actuators:
     | a=actuator                                             { [a] }
     | a=actuator EOL actuas=actuators                        { a :: actuas }
@@ -31,7 +32,7 @@ actuator:
 
 states:
     | s=state                                                { [s] }
-    | s=state EOL ss=states                                  { s :: ss }
+    | s=state ss=states                                      { s :: ss }
 
 
 initial:

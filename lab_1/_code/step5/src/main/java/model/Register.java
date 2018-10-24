@@ -6,7 +6,7 @@ import generator.Visitor;
 public class Register implements Visitable {
 
     private String name;
-    private Boolean value;
+    private Boolean value = false;
 
     public Register() {}
 

@@ -11,4 +11,9 @@ application led {
         led is HIGH
         goto off
     }
+
+    block {
+        led is LOW 
+        goto block
+    }
 }

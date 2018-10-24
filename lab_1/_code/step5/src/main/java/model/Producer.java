@@ -7,6 +7,7 @@ public class Producer implements NamedElement, Visitable {
 
     private String name;
     private boolean flag;
+    private Consumer target;
 
     public Producer() {}
 
@@ -15,14 +16,21 @@ public class Producer implements NamedElement, Visitable {
       this.flag = flag;
     }
 
-    public boolean getPin() {
-        return flag;
-    }
-
     public void setPin(boolean flag) {
         this.flag = flag;
     }
 
+    public boolean getPin() {
+        return flag;
+    }
+
+    public void setTarget(Consumer target) {
+        this.target = target;
+    }
+
+    public Consumer getTarget() {
+        return target;
+    }
 
     @Override
     public String getName() {

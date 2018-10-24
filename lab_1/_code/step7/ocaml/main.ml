@@ -1,4 +1,4 @@
-let treat : bool -> string -> unit = 
+let query : bool -> string -> unit = 
   fun debug file ->
   let ic = open_in file in 
   let stream = Lexing.from_channel ic in 
@@ -8,8 +8,11 @@ let treat : bool -> string -> unit =
     end;
     Generator.write_code query
 
-
-let _ = treat true "led.dsl"
+let debug = true
+let _ = try
+          query debug Sys.argv.(1)
+        with _ ->
+        print_endline "error : provide DSL file as argument"
 
 (* let () = 
     let _ = print_string "Am there" in

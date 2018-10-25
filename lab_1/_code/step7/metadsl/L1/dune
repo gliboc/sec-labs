@@ -1,5 +1,6 @@
-(executable 
-    (name parserL1)
+(library
+    (name L1)
+    (modules query parser lexer astL1 seeUML)
     (preprocess (pps ppx_deriving.std)))
 
 (rule 
@@ -13,6 +14,8 @@
     (deps parser.mly)
     (action (chdir %{workspace_root}
                 (run %{bin:menhir} --trace --explain %{deps}))))
+
+
 
 ; in case the parser has problems : 
 ; add --trace --explain to the run of menhir to debug

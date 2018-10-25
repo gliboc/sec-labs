@@ -1,0 +1,5 @@
+(executable 
+    (name main)
+    (preprocess (pps ppx_deriving.std))
+    (libraries L1))
+; Add --trace --explain arguments to menhir execution to debug

@@ -1,10 +1,6 @@
-open Angstrom
-
-
-
 (* ---------------------- *)
 
-let () =
+(* let () =
   begin
     let file = ref None in
     let speclist = [] in
@@ -12,25 +8,35 @@ let () =
     match !file with
     | Some name -> print_endline name
     | None -> ()
-  end
+  end *)
 
 (* ---------------------- *)
 
+type signal = Low | High
+[@@deriving show]
 
-
+type primitive_expr =
+  | Int of int 
+  | Sig of signal
+[@@deriving show]
 
 type identifier = string
+[@@deriving show]
 
 type atomic_type =
   | TInt
   | TCustom of identifier
+[@@deriving show]
 
-type typesig =
+type types =
   | TAtom of atomic_type
-  | TArrow of typesig * typesig
+  | TArrow of types * types
+  | TArray of atomic_type
+[@@deriving show]
 
 (* truc : bidule -> machin *)
-type definition = identifier * typesig
+type typesig = identifier * types
+[@@deriving show]
 
 (*
  * type Machin = Int 
@@ -38,9 +44,10 @@ type definition = identifier * typesig
  * type Machin = Set(1, 2, 3, 4)
  *)
 type type_decl =
-  | TAlias of typesig
-  | TUnion of identifier list
-  | TSet of expr list
+  | TAlias of identifier * types
+  | TUnion of identifier * (identifier list)
+  | TSet of identifier * (primitive_expr list)
+[@@deriving show]
 
 
 (*
@@ -48,14 +55,26 @@ type type_decl =
  * class truc { defs }
  * union truc {}
  *)
-type component =
-  | CType of identifier * type_decl
+type component = {
+  name : identifier ;
+  register_sig : typesig ;  
+  } [@@deriving show,make]
+  (* | CType of identifier * type_decl
   | CClass of identifier * definition list
-  | CUnion of 
+  | CUnion of component * component  *)
 
 type constructor = identifier * (identifier * identifier) list
+[@@deriving show]
 
-let parse file = 
+type term = 
+  | Component of component
+  | TypeDecls of type_decl list
+  | Couple of term * term
+[@@deriving show]
+
+(* let parse file =  *)
+(* let ( *> ) param1 param2 =
+    calc_something param1 param2
 
 module L1 = struct
   let is_space =
@@ -72,4 +91,4 @@ module L1 = struct
   let square_bracketed p = char '[' *> p <* char ']'
   let integer = take_while1 is_digit >>| int_of_string
 end
-
+ *)

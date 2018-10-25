@@ -1,0 +1,18 @@
+(executable 
+    (name parserL1)
+    (preprocess (pps ppx_deriving.std)))
+
+(rule 
+    (targets lexer.ml)
+    (deps lexer.mll)
+    (action (chdir %{workspace_root}
+                (run %{bin:ocamllex} %{deps}))))
+
+(rule 
+    (targets parser.ml parser.mli)
+    (deps parser.mly)
+    (action (chdir %{workspace_root}
+                (run %{bin:menhir} --trace --explain %{deps}))))
+
+; in case the parser has problems : 
+; add --trace --explain to the run of menhir to debug

@@ -10,7 +10,7 @@
 
 /* Standard Input/Ouput procedures **************/
 _boolean _get_reset_value(){
-  button_state=digitalRead(button);
+  button_state = digitalRead(button);
   return (button_state == HIGH);
 }
 
@@ -22,13 +22,18 @@ void cpt_O_led_on(void* cdata, _boolean _V) {
 }
 
 
+void cpt_O_counter(void* cdata, _integer _V) {
+  turnOff();
+  displayDigit(_V);
+}
+
+
 int main(){
   
   /* Lustre Context (state data structure) allocation for node "cpt"*/
   struct cpt_ctx* ctx = cpt_new_ctx(NULL);
   setup(); 
-  
-  
+
   /* Main loop */
   while(1){
 

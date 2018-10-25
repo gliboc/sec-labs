@@ -17,7 +17,10 @@ typedef struct  {
    _boolean _reset;
    //OUTPUTS
    _boolean _led_on;
+   _integer _counter;
    //REGISTERS
+   _integer M14;
+   _boolean M14_nil;
    _boolean M6;
    _boolean M6_nil;
    _boolean M2;
@@ -30,8 +33,10 @@ void cpt_I_reset(cpt_ctx* ctx, _boolean V){
    ctx->_reset = V;
 }
 extern void cpt_O_led_on(void* cdata, _boolean);
+extern void cpt_O_counter(void* cdata, _integer);
 #ifdef CKCHECK
 extern void cpt_BOT_led_on(void* cdata);
+extern void cpt_BOT_counter(void* cdata);
 #endif
 /*--------
 Internal reset input procedure
@@ -43,6 +48,7 @@ static void cpt_reset_input(cpt_ctx* ctx){
 Reset procedure
 --------*/
 void cpt_reset(cpt_ctx* ctx){
+   ctx->M14_nil = _true;
    ctx->M6_nil = _true;
    ctx->M2 = _true;
    cpt_reset_input(ctx);
@@ -67,18 +73,45 @@ Step procedure
 --------*/
 void cpt_step(cpt_ctx* ctx){
 //LOCAL VARIABLES
+   _boolean L7;
    _boolean L5;
    _boolean L1;
+   _integer L13;
+   _integer L12;
+   _integer L11;
+   _integer L9;
+   _integer T14;
    _boolean T6;
 //CODE
-   L5 = (! ctx->M6);
+   L7 = (! ctx->M6);
+   if (ctx->_reset) {
+      L5 = ctx->M6;
+   } else {
+      L5 = L7;
+   }
    if (ctx->M2) {
       L1 = _false;
    } else {
       L1 = L5;
    }
    cpt_O_led_on(ctx->client_data, L1);
+   L13 = (ctx->M14 + 1);
+   L12 = (L13 % 10);
+   if (ctx->_reset) {
+      L11 = 0;
+   } else {
+      L11 = L12;
+   }
+   if (ctx->M2) {
+      L9 = 0;
+   } else {
+      L9 = L11;
+   }
+   cpt_O_counter(ctx->client_data, L9);
+   T14 = L9;
    T6 = L1;
+   ctx->M14 = T14;
+   ctx->M14_nil = _false;
    ctx->M6 = T6;
    ctx->M6_nil = _false;
    ctx->M2 = ctx->M2 && !(_true);

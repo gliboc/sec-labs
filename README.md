@@ -12,7 +12,37 @@ In `lab_1`, the files `readme.md` and `readme.pdf` contain all our answers to th
 Each step in `lab1/_code` has a `readme.md` file which contains a description of our work on the step 
 and eventually some help in running it. 
 
-What follows is a concatenation of the `readme.md` of each step, for presentation purpose.
+Here follows the `readme`'s of the two steps we went further in: steps 4 and 7.
+
+## Step 4
+
+In this step, we tried to push the Finite-State-Machine 
+model with states as functions calling themselves to its limits.
+In order to do see, we implemented the composition of automaton 
+in order to define two Fsm, one for the led and one for the 7seg, 
+and run them in parallel. Although we acknowledge the possibility
+of different composition operations, we did not implement them 
+as we had no use for them here.
+
+Our implementation was made difficult by two desires:
+- We wanted to be able to use the Arduino processors' `interrupts` in order
+to push our button and have the system react to it instantly.
+- We wanted to be able to define different types of transitions:
+    - `DelayedTransition.java` is an automaton transition with
+    a delay that can be set.
+    - `SensorTransition.java` is an event-triggered transition.
+    - `Transition.java` in an instantaneous transition.
+
+To have the `interrupts` working, and therefore the button,
+working, the button has to be plugged on the PIN2 of the Arduino board due to Arduino internals. 
+The branching is defined in `Led.java`.
+
+The code produced is long by design (we wanted to implement
+every branching for every state in a transparent way), so the
+reasoning and debugging now really takes place only on the meta-model and code generation levels.
+
+![FSM meta-model](https://github.com/gliboc/sec-labs/blob/master/lab_1/figs/model_step4.png)
+
 
 
 ## Step 7
@@ -35,12 +65,12 @@ define the Producer/Consumer meta-model, as well as the one with State Machines.
 a typed term in OCaml which describes a DSL syntax which we call L2.
 It can be used for several purposes:
     - First, to _help the parsing of L2_ by using an abstract parser such
-    as Angstrom, with the use of functors. 
+      as Angstrom, with the use of functors. 
     - Second, to _help the code generation_ which we call G2 by specifying
-    which terms we should be able to visit and the relation between them. For both these 
-    tasks, in our proof of concept here, we are able to define the ".mli" 
-    type signatures of the modules that would implement parsing and 
-    code generation, but we believe it is possible to go much further.
+      which terms we should be able to visit and the relation between them. For both these 
+      tasks, in our proof of concept here, we are able to define the ".mli" 
+      type signatures of the modules that would implement parsing and 
+      code generation, but we believe it is possible to go much further.
 Because we want to be able to reason and visualize our meta-model,
 from this domain specific modeling language L1 we build a projection 
 `SeeUML` towards PlantUML diagrams. 

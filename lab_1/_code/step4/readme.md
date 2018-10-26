@@ -1,62 +1,47 @@
-# Arduino Lab
+## Step 4
+
+In this step, we tried to push the Finite-State-Machine 
+model with states as functions calling themselves to its limits.
+In order to do see, we implemented the composition of automaton 
+in order to define two Fsm, one for the led and one for the 7seg, 
+and run them in parallel. Although we acknowledge the possibility
+of different composition operations, we did not implement them 
+as we had no use for them here.
+
+Our implementation was made difficult by two desires:
+- We wanted to be able to use the Arduino processors' `interrupts` in order
+to push our button and have the system react to it instantly.
+- We wanted to be able to define different types of transitions:
+    - `DelayedTransition.java` is an automaton transition with
+    a delay that can be set.
+    - `SensorTransition.java` is an event-triggered transition.
+    - `Transition.java` in an instantaneous transition.
+
+To have the `interrupts` working, and therefore the button,
+working, the button has to be plugged on the PIN2 of the Arduino board due to Arduino internals. 
+The branching is defined in `Led.java`.
+
+The code produced is long by design (we wanted to implement
+every branching for every state in a transparent way), so the
+reasoning and debugging now really takes place only on the meta-model and code generation levels.
+
+![FSM meta-model](https://github.com/gliboc/sec-labs/blob/master/lab_1/figs/model_step4.png)
 
 ## How to compile?
 
 ```
-azrael:step4 mosser$ mvn clean package
-[INFO] Scanning for projects...
-[INFO]
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Java implementation of ArduinoML abstract syntax 1.0
-[INFO] ------------------------------------------------------------------------
-[INFO]
-[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ kernel-jvm ---
-[INFO] Deleting /Users/mosser/work/ens/sec-labs/lab_1/_code/step4/target
-[INFO]
-[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ kernel-jvm ---
-[INFO] Using 'UTF-8' encoding to copy filtered resources.
-[INFO] skip non existing resourceDirectory /Users/mosser/work/ens/sec-labs/lab_1/_code/step4/src/main/resources
-[INFO]
-[INFO] --- maven-compiler-plugin:3.6.1:compile (default-compile) @ kernel-jvm ---
-[INFO] Changes detected - recompiling the module!
-[INFO] Compiling 10 source files to /Users/mosser/work/ens/sec-labs/lab_1/_code/step4/target/classes
-[INFO]
-[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ kernel-jvm ---
-[INFO] Using 'UTF-8' encoding to copy filtered resources.
-[INFO] skip non existing resourceDirectory /Users/mosser/work/ens/sec-labs/lab_1/_code/step4/src/test/resources
-[INFO]
-[INFO] --- maven-compiler-plugin:3.6.1:testCompile (default-testCompile) @ kernel-jvm ---
-[INFO] No sources to compile
-[INFO]
-[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ kernel-jvm ---
-[INFO] No tests to run.
-[INFO]
-[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ kernel-jvm ---
-[INFO] Building jar: /Users/mosser/work/ens/sec-labs/lab_1/_code/step4/target/kernel-jvm-1.0.jar
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 3.735 s
-[INFO] Finished at: 2017-09-12T10:46:30+02:00
-[INFO] Final Memory: 17M/211M
-[INFO] ------------------------------------------------------------------------
+mvn clean package
 ```
 
 ## How to generate the code from the model?
 
 ```
-azrael:step4 mosser$ mvn -q exec:java
-Generating C code: ./output/fsm.h
-Generating C code: ./output/main.c
-Code generation: done
-Board upload : cd output && make upload && cd ..;
+mvn -q exec:java
 ```
 
-## How to upload to the board?
+## Use the code
 
-```
-azrael:step4 mosser$ cd output && make upload && cd ..;
-avr-gcc -c -mmcu=atmega328p -Wall -I. -I/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/cores/arduino -I/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/variants/standard -DF_CPU=16000000 -Os  main.c -o main.o
-...
-avrdude done.  Thank you.
-```
+From `output` directory: 
+
+`make` puis `sudo make upload`
+

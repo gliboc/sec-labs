@@ -1,5 +1,19 @@
 @startuml
 
+skinparam BackgroundColor  WhiteSmoke
+
+skinparam class {
+FontSize 13
+BackgroundColor<<Apache>> Red
+BorderColor<<Apache>> #FF6655
+FontName Droid Sans
+BorderColor black
+BackgroundColor DarkGoldenRod
+ArrowFontName Fira Code
+ArrowColor #FF6655
+ArrowFontColor #FFFFFF
+}
+
 abstract class NamedElement {
  + String name
 }

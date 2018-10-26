@@ -73,6 +73,8 @@ class "Ocaml G2" <<(P,orange)>> {
     compiler : AST 🡒 C
 }
 
+"Ocaml G2" --|> Compilation
+
 abstract class Projection {
     fonction : langage 🡒 langage
 }

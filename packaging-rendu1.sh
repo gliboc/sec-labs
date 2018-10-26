@@ -22,6 +22,7 @@ for item in $steps; do
     echo "Packaging $item as step$i"
     cp -r $item $target
     cp $item/report$i.md $target/reports
+    pandoc $item/report$i.md -o $item/report$i.pdf
     i=$(($i+1))
 done
 

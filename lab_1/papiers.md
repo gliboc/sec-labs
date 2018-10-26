@@ -1,0 +1,2 @@
+- Guillaume: `Metacasanova: an optimized meta-compiler for domain-specific languages`
+- Lucas: `A Haskell compiler for signal transforms`

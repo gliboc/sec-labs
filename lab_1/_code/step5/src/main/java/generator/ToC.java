@@ -34,9 +34,7 @@ public class ToC extends Visitor<StringBuffer> {
 		}
 		c("");
 
-		for (Producer prod : app.getProducers()) {
-			prod.accept(this);
-		}
+	
 
 		c("void turnOff() {");
 		c("  for (int a = 1; a<=8) {");

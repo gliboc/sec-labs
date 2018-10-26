@@ -1,6 +1,6 @@
 @startuml
 
-skinparam BackgroundColor SlateGray
+skinparam BackgroundColor  WhiteSmoke
 
 skinparam class {
 FontSize 13

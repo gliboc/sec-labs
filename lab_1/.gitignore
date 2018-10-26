@@ -8,3 +8,9 @@
 **/output/fsm.h
 **/step5/lustre-v4-*
 .vscode
+*.pdf
+.merlin
+dune-project
+.settings
+.project
+.classpath

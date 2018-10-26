@@ -10,28 +10,37 @@ import java.util.List;
 public class Consumer implements NamedElement, Visitable {
 
     private String name;
-    private List<Action> actions = new ArrayList<Action>();
+    private List<SetActuator> setact = new ArrayList<SetActuator>();
+    private List<SetRegister> setreg= new ArrayList<SetRegister>();
     private List<Register> memory = new ArrayList<Register>();
 
     public Consumer() {}
 
-    public Consumer(String name, List<Action> actions, List<Register> memory) {
-      this.name = name;
-      this.actions = actions;
-      this.memory = memory;
+    public Consumer(String name, List<Register> memory) {
+        this.name = name;
+        this.memory = memory;
     }
 
     public List<Register> getMemory() {
         return memory;
     }
 
-    public List<Action> getActions() {
-        return actions;
+    public List<SetActuator> getSetActions() {
+        return setact;
     }
 
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
+    public void setSetActions(List<SetActuator> actions) {
+        this.setact = actions;
     }
+
+    public List<SetRegister> getSetRegisters() {
+        return setreg;
+    }
+
+    public void setSetRegisters(List<SetRegister> actions) {
+        this.setreg = actions;
+    }
+
 
     @Override
     public void accept(Visitor visitor) {

@@ -44,7 +44,6 @@ reasoning and debugging now really takes place only on the meta-model and code g
 ![FSM meta-model](https://github.com/gliboc/sec-labs/blob/master/lab_1/figs/model_step4.png)
 
 
-
 ## Step 7
 
 In this step we first implemented a parser and code generation for 
@@ -74,6 +73,15 @@ It can be used for several purposes:
 Because we want to be able to reason and visualize our meta-model,
 from this domain specific modeling language L1 we build a projection 
 `SeeUML` towards PlantUML diagrams. 
+This is a very simple UML diagram produced this way from the `simple.dsl` app.
+
+![Simple UML example](https://github.com/gliboc/sec-labs/blob/master/lab_1/figs/simple.png)
+
+In order to refine it, 
+we would need to implement constructs with type with `exists v, P` in our specification
+language. If an object has this type, an arrow --|> would appear in the UML
+diagram between him and its abstract class. We would implement 
+relations too, to have possibly many more relations on the visualization !
 
 Finally, this straightforward execution can be abstracted into the 
 meta-model of DSL generation, which we tried to sum up in this UML 

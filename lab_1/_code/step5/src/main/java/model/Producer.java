@@ -12,8 +12,8 @@ public class Producer implements NamedElement, Visitable {
     public Producer() {}
 
     public Producer(String name, boolean flag) {
-      this.name = name;
-      this.flag = flag;
+        this.name = name;
+        this.flag = flag;
     }
 
     public void setPin(boolean flag) {

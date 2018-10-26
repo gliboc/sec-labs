@@ -28,42 +28,51 @@ public class Led {
         Actuator g = new Actuator("g", 7);
 
         // Registers (or flags)
-        Register switch_led_flag = new Register("LED_");
+        Register switch_led_flag = new Register("LED_FLAG", false);
+        Register reset_flag = new Register("RESET_FLAG", false);
+        Register const_flag = new Register("CONST_FLAG", false);
 
-        // Producers 
-        Producer btn_push = new Producer("button_push", 
+        
+        SetActuator turnOff = new SetActuator(Arrays.asList(a,b,c,d,e,f,g), SIGNAL.HIGH);
+        SetActuator printOne = new SetActuator(Arrays.asList(b,c), SIGNAL.LOW);
+        SetActuator printTwo = new SetActuator(Arrays.asList(a,b,d,e,g), SIGNAL.LOW);
+        SetActuator printThree = new SetActuator(Arrays.asList(a,b,c,d,g), SIGNAL.LOW);
+        SetActuator printFour = new SetActuator(Arrays.asList(b,c,f,g), SIGNAL.LOW);
+        SetActuator printFive = new SetActuator(Arrays.asList(a,c,d,f,g), SIGNAL.LOW);
+        SetActuator printSix = new SetActuator(Arrays.asList(a,c,d,e,f,g), SIGNAL.LOW);
+        SetActuator printSeven = new SetActuator(Arrays.asList(a,b,c), SIGNAL.LOW);
+        SetActuator printEight = new SetActuator(Arrays.asList(a,b,c,d,e,f,g), SIGNAL.LOW);
+        SetActuator printNine = new SetActuator(Arrays.asList(a,b,c,d,f,g), SIGNAL.LOW);
+        SetActuator printZero = new SetActuator(Arrays.asList(a,b,c,d,e,f), SIGNAL.LOW);
 
-        // Declaring actions
-        SetActuator switch_led = new SetActuator(switch_led_flag, led, SIGNAL.HIGH, SIGNAL.LOW); 
 
+         // Consumer 
+         Consumer reset = new Consumer();
+         reset.setName("reset");
+         reset.setSetActions(Arrays.asList(turnOff));
+ 
+         // Producers 
+         Producer btn_push = new Producer("button_push", false);
+         btn_push.setTarget(reset);
+        // Consumer led_pull = new Consumer("led_pull", false);
 
-        // Action turnOff = new Action(Arrays.asList(a,b,c,d,e,f,g), SIGNAL.HIGH);
-        // Action printOne = new Action(Arrays.asList(b,c), SIGNAL.LOW);
-        // Action printTwo = new Action(Arrays.asList(a,b,d,e,g), SIGNAL.LOW);
-        // Action printThree = new Action(Arrays.asList(a,b,c,d,g), SIGNAL.LOW);
-        // Action printFour = new Action(Arrays.asList(b,c,f,g), SIGNAL.LOW);
-        // Action printFive = new Action(Arrays.asList(a,c,d,f,g), SIGNAL.LOW);
-        // Action printSix = new Action(Arrays.asList(a,c,d,e,f,g), SIGNAL.LOW);
-        // Action printSeven = new Action(Arrays.asList(a,b,c), SIGNAL.LOW);
-        // Action printEight = new Action(Arrays.asList(a,b,c,d,e,f,g), SIGNAL.LOW);
-        // Action printNine = new Action(Arrays.asList(a,b,c,d,f,g), SIGNAL.LOW);
-        // Action printZero = new Action(Arrays.asList(a,b,c,d,e,f), SIGNAL.LOW);
+        // List<State> numerals = Arrays.asList(one, two, three, four, five, six, seven, eight, nine, zero);
+        // List<DelayedTransition> incrementals = Arrays.asList(incrOne, incrTwo, incrThree, incrFour, incrFive, incrSix, incrSeven, incrEight, incrNine, incrZero);
 
-        List<State> numerals = Arrays.asList(one, two, three, four, five, six, seven, eight, nine, zero);
-        List<DelayedTransition> incrementals = Arrays.asList(incrOne, incrTwo, incrThree, incrFour, incrFive, incrSix, incrSeven, incrEight, incrNine, incrZero);
-
-        for (int i = 0; i < numerals.size(); i++) {
-            numerals.get(i).setTransitions(Arrays.asList(resetCounter, incrementals.get(i)));
-        }
+        // for (int i = 0; i < numerals.size(); i++) {
+        //     numerals.get(i).setTransitions(Arrays.asList(resetCounter, incrementals.get(i)));
+        // }
 
             // Building the App
             App theSwitch = new App("ArDUinO ReJuvEnAtIon");
+            theSwitch.setRegisters(Arrays.asList(switch_led_flag, reset_flag, const_flag));
+            theSwitch.setProducers(Arrays.asList(btn_push));
 
-            theSwitch.setBricks(Arrays.asList(led, a, b, c, d, e, f, g));
-            theSwitch.setSensors(Arrays.asList(btn));
+            // theSwitch.setBricks(Arrays.asList(led, a, b, c, d, e, f, g));
+            // theSwitch.setSensors(Arrays.asList(btn));
 
-            theSwitch.setFsm(Arrays.asList(blinkingLed, sevenSeg));
-            theSwitch.setInitial(on);
+            // theSwitch.setFsm(Arrays.asList(blinkingLed, sevenSeg));
+            // theSwitch.setInitial(on);
 
             // Generating Code
             Visitor codeGenerator = new ToC();

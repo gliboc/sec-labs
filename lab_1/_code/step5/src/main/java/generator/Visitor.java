@@ -5,7 +5,6 @@ import model.*;
 public abstract class Visitor<T> {
 
 	public abstract void visit(App app);
-	public abstract void visit(State state);
 	public abstract void visit(Action action);
 	public abstract void visit(Producer producer);
 	public abstract void visit(Consumer consumer);

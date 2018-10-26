@@ -11,14 +11,13 @@ public class App implements NamedElement, Visitable {
 	private List<Actuator> actuators = new ArrayList<Actuator>();
 	private List<Producer> producers = new ArrayList<Producer>();
 	private List<Consumer> consumers = new ArrayList<Consumer>();
-	// private List<State> states = new ArrayList<State>();
-	private State initial;
+	private List<Register> registers = new ArrayList<Register>();
 
-  public App() {}
+	public App() {}
 
-  public App(String name) {
-    this.name = name;
-  }
+	public App(String name) {
+    	this.name = name;
+	}
 
 	@Override
 	public String getName() {
@@ -30,13 +29,13 @@ public class App implements NamedElement, Visitable {
 		this.name = name;
 	}
 
-	// public List<Register> getRegisters() {
-	// 	return registers;
-	// }
+	public List<Register> getRegisters() {
+		return registers;
+	}
 
-	// public void setRegisters(List<Register> registers) {
-	// 	this.registers = registers;
-	// }
+	public void setRegisters(List<Register> registers) {
+		this.registers = registers;
+	}
 
 	public List<Actuator> getActuators() {
 		return actuators;
@@ -62,21 +61,21 @@ public class App implements NamedElement, Visitable {
 	// 	this.states = states;
 	// }
 
-	public void setFsm(List<Fsm> fsm) {
-		this.fsm = fsm;
-	}
+	// public void setFsm(List<Fsm> fsm) {
+	// 	this.fsm = fsm;
+	// }
 	
-	public List<Fsm> getFsm() {
-		return fsm;
-	}
+	// public List<Fsm> getFsm() {
+	// 	return fsm;
+	// }
 
-	public State getInitial() {
-		return initial;
-	}
+	// public State getInitial() {
+	// 	return initial;
+	// }
 
-	public void setInitial(State initial) {
-		this.initial = initial;
-	}
+	// public void setInitial(State initial) {
+	// 	this.initial = initial;
+	// }
 
 	@Override
 	public void accept(Visitor visitor) {

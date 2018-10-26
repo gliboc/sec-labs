@@ -15,8 +15,8 @@ public class Actuator implements NamedElement, Visitable {
     public Actuator() {}
 
     public Actuator(String name, int pin) {
-      this.name = name;
-      this.pin = pin;
+        this.name = name;
+        this.pin = pin;
     }
 
     public int getPin() {

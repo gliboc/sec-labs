@@ -1,16 +1,30 @@
 @startuml
 
+skinparam BackgroundColor SlateGray
+
+skinparam class {
+FontSize 13
+BackgroundColor<<Apache>> Red
+BorderColor<<Apache>> #FF6655
+FontName Droid Sans
+BorderColor black
+BackgroundColor DarkGoldenRod
+ArrowFontName Fira Code
+ArrowColor #FF6655
+ArrowFontColor #FFFFFF
+}
+
 ' DSL are with squares
 ' Embedded are with circles
-' Compilers / Transpilers are with : ?
+' Compilers / Transpilations are with : ?
 
 class Abstract <<(L,orchid)>> {
     - Specification language L1
 }
 
-Abstract -> Visualization
-(Abstract, Visualization) . SeeUML
-SeeUML --|>Transpiler 
+Abstract -> PlantUML
+(Abstract, PlantUML) . SeeUML
+SeeUML --|> Visualisation
 
 class SeeUML <<(P,orange)>> {
     projection : L1 🡒 PlantUML
@@ -26,7 +40,7 @@ class AST <<(E,lightgreen)>> {
 AST --|> MetaModel : "types"
 
 
-class Visualization <<(L,orchid)>> {
+class PlantUML <<(L,orchid)>> {
     - UML diagrams
 }
 
@@ -39,11 +53,9 @@ class Storage << (L,orchid) >> {
     - Implementation language L2
 }
 
-class "Angstrom G0" <<(P,orange)>> {
+class "Menhir G0" <<(P,orange)>> {
     lexer/parser : L1 🡒 MetaModel
 }
-
-"Angstrom G0" --|> Transpiler 
 
 class MetaModel <<(R,red)>> {
     terms description
@@ -51,27 +63,44 @@ class MetaModel <<(R,red)>> {
 }
 
 Abstract -> MetaModel
-(Abstract, MetaModel) . "Angstrom G0"
+(Abstract, MetaModel) . "Menhir G0"
 
-class "Editable G1" <<(P,orange)>> {
+class "Angstrom G1" <<(P,orange)>> {
     lexer/parser : L2 🡒 AST
 }
 
-class G2 <<(P,orange)>> {
+class "Ocaml G2" <<(P,orange)>> {
     compiler : AST 🡒 C
 }
 
-abstract class Transpiler {
-    fun : Σ* 🡒 Σ*
+abstract class Projection {
+    fonction : langage 🡒 langage
 }
 
-Transpiler <|-- G2 
-Transpiler <|-- "Editable G1" 
-Storage -> AST 
-(Storage, AST) . "Editable G1"
-AST -> Executable
-(AST, Executable) . G2
+abstract class Visualisation {
+    fonction : langage L 🡒 DSL visuel
+}
 
-MetaModel <|-- Storage : "terms"
+abstract class "Lexer/Parser" {
+    fonction : langage L 🡒 AST embedded
+}
+
+abstract class Compilation {
+    fonction : AST embedded 🡒 code source
+}
+
+Compilation --|> Projection 
+Visualisation --|> Projection 
+"Lexer/Parser" --|> Projection
+
+"Menhir G0" --|> "Lexer/Parser"
+"Angstrom G1" --|> "Lexer/Parser"
+
+Storage -> AST 
+(Storage, AST) . "Angstrom G1"
+AST -> Executable
+(AST, Executable) . "Ocaml G2"
+
+MetaModel <|-- Storage : "termes"
 
 @enduml

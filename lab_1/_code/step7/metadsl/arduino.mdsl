@@ -1,12 +1,12 @@
-type Pin = Set(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
+type Pin = Set (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
 type Signal = High | Low
-type ScreenState = Set(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+type ScreenState = Set (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
 
 class Register (T: type) { value : T }
 
 class Actuator { pin : Pin }
 class Sensor { pin : Pin }
-class SevenSeg { pins : [Pin; 7] }
+class SevenSeg { pins : [Pin] }
 
 union Action {
   display (value: ScreenState) on (screen: SevenSeg)

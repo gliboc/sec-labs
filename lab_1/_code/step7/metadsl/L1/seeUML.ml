@@ -64,6 +64,18 @@ let transfoUML : term -> unit =
         let oc = open_out @@ (List.hd (String.split_on_char '.' model_file)) ^ ".puml" in 
         begin
         c("@startuml\n");
+        c("skinparam BackgroundColor SlateGray\n");
+        c("skinparam class {");
+        c("FontSize 13");
+        c("BackgroundColor<<Apache>> Red");
+        c("BorderColor<<Apache>> #FF6655");
+        c("FontName Droid Sans");
+        c("BorderColor black");
+        c("BackgroundColor DarkGoldenRod");
+        c("ArrowFontName Impact");
+        c("ArrowColor #FF6655");
+        c("ArrowFontColor #777777");
+        c("}");
         uml_of_term term;
         c("@enduml");
         let line = ref "" in 

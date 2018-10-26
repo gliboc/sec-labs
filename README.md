@@ -51,7 +51,7 @@ diagram - this time, handwritten ! Usually, UML diagram which contains
 all the informations on a system are difficult to explore. But having
 different UML diagrams for each abstraction level does not seem so bad.
 
-![A meta-model of DSL generation](http://github.com/gliboc/sec-labs/lab_1/figs/metadsl.png)
+![A meta-model of DSL generation](https://github.com/gliboc/sec-labs/blob/master/lab_1/figs/metadsl.png)
 
 
 ### Lexer/parser written with Ocamllex and Menhir and code generation

@@ -23,13 +23,15 @@
 <br/><br/>
 
 
-- The readability is not so good, mainly due to the manipulation of the PINs using vectors of bits.
+- The readability is not good, mainly due to the manipulation of the PINs 
+  using vectors of bits. 
   The skills required are not very high provided you can write C and have the
   right documentation regarding the ports configuration and usage.
 
-- The expressivity is the highest because we have access to all the possibilities of the machine,
-  provided we have a documentation for all the system primitives.  Configurability is very high.
-  The debugging is difficult due to the operations being so low-level: if the program does
+- The expressivity is the highest because we have access to all the possibilities
+  of the machine, provided we have a documentation for all the system primitives.
+  The configurability is very high 
+  The debugging is difficult due to the operations being low-level: if the program does
   not have the desired effects it could for example be due to a bit that was written to 
   the wrong value, or a write operation that was not conducted due to a wrong writing mode
   and which would fail silently; all errors which are not on the same conceptual level
@@ -51,7 +53,7 @@
     - Is the readability problem solved?
 
     - What kind of parallelism can still be expressed?
-
+        
     - Who is the public targeted by this “language”?
 
     - Is this language extensible enough to support new features?
@@ -61,7 +63,7 @@
 &nbsp;
 &nbsp;
 
-- Not completely: it is now easier to model the operations which require to 
+- Not completely : it is now more easy the operations which require to 
   turn on or off one PIN, but the more complex register states have 
   become less understandable due to the lack of binary operations.
   However, the rest is more readable.
@@ -176,17 +178,13 @@ Since it comes second conceptually, we denote it with ii).
 &nbsp;
 
 - The main pros that seem to come with meta-modeling are: readability, modularity and robustness.
-
-  The readability comes from the fact that all actions are classified (into classes and enumerations),
-  with a clear view of the dependency between them thanks to the UML modeling of our system.
-  The modularity is not a given but is more obtainable in a well-designed meta-model because,
-  when the possibilities of the system (components, signals and actions) are clearly defined and in an independent manner,
-  each part of them acquires a good reusability.
-
-  For example, the actions which allow to print numbers on the 7seg can be reused in any state of any fsm.
-  Robustness is achieved because the executed code is no longer written by hand but generated.
-  It means that most of the errors become logic errors (for example, by giving the wrong pin to an actuator,
-  or setting up the wrong transition between two states) rather than language or syntaxic errors.
+The readability comes from the fact that all actions 
+are classified (into classes and enumerations), with
+a clear view of the dependency between them thanks to
+the UML modeling of our system.
+The modularity is not a given but is more obtainable in a well-designed meta-model because, when the possibilities of the system (components, signals and actions) are clearly defined and in an independent manner, each part of them acquires a good reusability.
+For example, the actions which allow to print numbers on the 7seg can be reused in any state of any fsm.
+Robustness is achieved because the executed code is no longer written by hand but generated. It means that most of the errors become logic errors (for example, by giving the wrong pin to an actuator, or setting up the wrong transition between two states) rather than language or syntaxic errors.
 
     - One drawback currently is that, after the meta-model is defined, translating it in Java classes is cumbersome
     as it requires to defined many new objects, sometimes in a way that is a bit repetitive - 
@@ -245,52 +243,132 @@ the type of the variables inside the UML diagram: it ensured
 that these variables would be initialized to computable values.
 There are other structural properties that could be verified.
 
+## Step 5
 
-# Step 6
+    - Compare how this modeling solution and the previous
+    one match the domain, especially regarding expressiveness
+    and scalability.
+
+    - What is the cost (e.g., modeling, code generation) 
+    of a new feature for the developer?
+
+    - What about scalability of the modeling paradigm itself?
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+- It is more convenient to match the domain according
+to components (FSM) or functionalities (Producer/Consumers)
+and it is more scalable too, as if there had been three states
+without composition implementing the product by hand 
+would have been very tedious.
+
+- The cost is to write the interface of the new Java classes 
+and the corresponding Visitors. It is not costly, and straightforward
+to implement.
+
+- The paradigm lacks abstraction: if there are too many functionalities
+or components interact in weird ways, the DSL itself will be very redundant.
+Higher abstractions would be needed later on.# Step 6
 
     - Who is the intended user for such a language?
 
-    - What is the cost of reusing this existing DSL for the developer in terms of code?
+    - What is the cost of reusing this existing DSL for 
+    the developer in terms of code?
 
     - What is the cost of adding a new task of our domain?
 
     - Was is the cost of adding a new hardware target?
 
-    - The Lustre language comes with its own ecosystem (test, formal verification), what are the generic properties we can imagine to prove from our domain?
+    - The Lustre language comes with its own ecosystem 
+    (test, formal verification), what are the generic properties 
+    we can imagine to prove from our domain?
 
 &nbsp;
 &nbsp;
 &nbsp;
 
-- Lustre seems to be intended for users wanting to work at the conceptual level of the program.
-  The level of abstraction obtained with Lustre entirely gets rid of the concern of the underlying platform we are developing for.
-  We no longer have to concern ourselves about pins, frequencies and signals.
-  The behavior is now only described in terms of dataflow and synchronous programming.
-  Thanks to this, the user can just focus on reasoning about how the reactive system should behave.
+<br/><br/>
+<br/><br/>
+
+
+- Lustre is clearly designed for users that want to work at 
+the conceptual level of the program. The level of abstraction 
+entirely gets rid of the underlying platform we are developing for. 
+There are no longer pins, frequencies and signals. 
+The behavior is only described in terms of dataflow 
+and synchronous programming.
 
 - Because of such an abstract description of application behaviors, code is highly reusable.
-  Essentially, if one wanted to have a counter increasing from 1 to 9 while another variable is alternating between two values,
-  they could directly copy our code and it would just work, without having to worry about hardware.
 
-- However, the costly part remains bridging the gap between this abstract description and the specific implementation for our current domain.
-  As have been experienced in this step of the lab, this process has proven to be quite tedious.
-  Coding the intended high-level behavior in lustre was a really smooth experience,
-  whereas glueing the generated C code from lustre with the domain-specific code can prove to be a tad awkward and painful.
-
-  To be more specific to the question, adding a new task to the domain requires one to:
-
+- However, the costly part remains bridging the gap between this 
+abstract description and the specific implementation for our current 
+domain. As have been experienced in this step of the Lab, this process
+is quite tedious. Coding the intended high-level behavior in lustre is a 
+really smooth experience, whereas glueing the generated C code from lustre 
+with the domain-specific code can prove to be a tad painful. 
+To be more specific to the question, adding a new task to the domain requires one to:
     - define the new abstract behavior in the lustre code
     - generate the new C code
     - implement the newly defined C routines to take into account the abstract behavior.
-    - bridge that with the available hardware library abstraction, if available at all, or implement it otherwise.
+    - bridge that with the hardware lib.
 
-  Especially if the new task introduces new bindings from lustre to the C glue code, the work necessary can be costly in terms of effort.
+- Adding another hardware target does not require one to fiddle with lustre anymore. 
+The only thing that needs to be modified is the part of the C library which provides 
+an high-level interface to the hardware. My personal assessment is that it is relatively easy to do.
 
-- Adding another hardware target does not require one to fiddle with lustre anymore.
-  The only thing that needs to be modified is the part of the C library which provides an high-level interface to the hardware.
-  Our personal assessment is that it is relatively easy to do.
+- Working with a language with such an ecosystem can prove to be very useful when you 
+are trying to prove properties on the execution of your program. One could for example 
+prove that two values are forever alternating, and do this formally, without having to consider hardware.
 
-- Working with a language with such an ecosystem can prove to be very useful when you are trying to prove properties on the execution of your program.
-  One could for example prove that two values are forever alternating, and do this formally, without having hardware consideration get in the way.
-  Generic properties could consist in proving that the execution never gets stuck in a state, or verify any critical temporal property.
+## Step 7 
 
+    - Who is the intended user ? What about the tooling
+    associated to the language.
+
+    - More generally, what is the cost of such an approach ?
+
+    - To what extent is the language fragile to the introduction
+    of new features ?
+
+    - What is the relation ship between the meta-model and 
+    the grammar ?
+
+    - How to validate that the defined syntax is the 
+    right one ?
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+- The user can be anyone targetted by the person who designed 
+this language. However, the tooling requires a tech-savy person
+who is experienced in one or two domains:
+computer science, in order to write a parser and some code 
+generation, and the target domain where this language will be used.
+This could also be several persons gathering their knowledge together.
+
+- The cost of this approach requires to think about a usable and 
+useful lanugage syntax for manipulating the targetted domain.
+This is mostly a reflexion so it is hard to quantify it. After that,
+the implementation needs to be written entirely before any work is done.
+This last part is straightforward and a bit redundant, but it can be 
+lenghty too.
+So this approach starts slow, which is to be put in balance with the
+time gained by using a DSL in the long term.
+
+- Quite fragile because the parser has to be modifier, which
+exposes to shift/reduce conflics and other joys. There is no guarantee
+that a small language extension that may appear in a lot of places does
+not greatly raise the difficulty of the parsing.
+
+- The only relationship is in the mind of the person who implemented 
+the parser. This, with the redundant feeling of the implementation of 
+the parser, led us to consider a more tight bound between the meta-model
+and the grammar: what if the meta-model defined partially or entirely the 
+grammar ?
+
+- One way is to evaluate this is to empirically measure how long it is to 
+do a usual domain task in this new DSL. Other qualities of GPL apply as 
+well: readability, less surprisingness...

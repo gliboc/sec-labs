@@ -16,15 +16,22 @@ steps+="${pref}/step5 "
 steps+="${pref}/step6"
 
 mkdir $target/reports
+rm cat-readme.md
+touch cat-readme.md
+
 
 i=1
 for item in $steps; do
     echo "Packaging $item as step$i"
     cp -r $item $target
     cp $item/report$i.md $target/reports
+    echo "## Step $i" >> cat-readme.md
+    cat $item/readme.md  >> cat-readme.md
     pandoc $item/report$i.md -o $item/report$i.pdf
     i=$(($i+1))
 done
+
+
 
 pandoc $target/reports/*.md -o $target/reports.pdf
 cat $target/reports/*.md > $target/reports.md

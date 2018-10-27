@@ -1,10 +1,17 @@
-
 type actuator = {
     name: string; 
     pin: int
 } [@@deriving show,make]
 
 type actuators = actuator list
+[@@deriving show]
+
+type sensor = {
+    name: string; 
+    pin: int
+} [@@deriving show,make]
+
+type sensors = sensor list
 [@@deriving show]
 
 type pin = int
@@ -21,11 +28,11 @@ type action = {
 type actions = action list
 [@@deriving show]
 
-
 type state = {
     name: string; 
     actions: actions; 
-    next: string
+    next: string;
+    inext: (string * signal * string) option
 } [@@deriving show,make]
 
 type states = state list 
@@ -34,6 +41,7 @@ type states = state list
 type app = {
     name:string;
     actuators: actuators;
+    sensors: sensors;
     initial: state;
     states: states
 } [@@deriving show,make]

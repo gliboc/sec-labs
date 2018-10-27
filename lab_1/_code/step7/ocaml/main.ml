@@ -9,10 +9,10 @@ let query : bool -> string -> unit =
     Generator.write_code query
 
 let debug = true
-let _ = try
+let _ = (*try*)
           query debug Sys.argv.(1)
-        with _ ->
-        print_endline "error : provide DSL file as argument"
+        (*with _ ->
+        print_endline "error : provide DSL file as argument"*)
 
 (* let () = 
     let _ = print_string "Am there" in

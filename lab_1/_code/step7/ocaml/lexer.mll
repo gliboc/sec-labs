@@ -10,14 +10,16 @@ let incr_linenum lexbuf =
     }
 }
 
-rule token = parse 
+rule token = parse
     | [' ' '\t' ]                                           { token lexbuf }    
     | [ '\n' ]                                              { incr_linenum lexbuf; token lexbuf }
     | "application"                                         { APPLICATION }
     | "{"                                                   { LBRACKET }
     | "}"                                                   { RBRACKET }
     | "is"                                                  { IS }
+    | "if"                                                  { IF }
     | "actuator"                                            { ACTUATOR }
+    | "sensor"                                              { SENSOR }
     | "->"                                                  { INITIAL }
     | "low" | "LOW"                                         { LOW }
     | "high" | "HIGH"                                       { HIGH }

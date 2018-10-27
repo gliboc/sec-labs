@@ -1,8 +1,8 @@
-B /home/glib/.opam/4.07.0/lib/ppx_deriving
-B /home/glib/.opam/4.07.0/lib/result
+B /home/flupe/.opam/4.07.0/lib/ppx_deriving
+B /home/flupe/.opam/4.07.0/lib/result
 B _build/default/.main.eobjs
-S /home/glib/.opam/4.07.0/lib/ppx_deriving
-S /home/glib/.opam/4.07.0/lib/result
+S /home/flupe/.opam/4.07.0/lib/ppx_deriving
+S /home/flupe/.opam/4.07.0/lib/result
 S .
-FLG -ppx '/home/glib/reposgit/sec-labs/lab_1/_code/step7/ocaml/_build/default/.ppx/ppx_deriving.std/ppx.exe --as-ppx'
+FLG -ppx '/home/flupe/docs/ens/m2/software-compil/sec-labs/lab_1/_code/step7/ocaml/_build/default/.ppx/ppx_deriving.std/ppx.exe --as-ppx'
 FLG -w @a-4-29-40-41-42-44-45-48-58-59-60-40 -strict-sequence -strict-formats -short-paths -keep-locs

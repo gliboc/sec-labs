@@ -58,7 +58,7 @@ public class ToC extends Visitor<StringBuffer> {
 		Fsm funion = app.getFsm().get(0);
 
 		for (Fsm fsm : app.getFsm()) {
-			funion = funion.fusion(funion, fsm);
+			funion = funion.par_fusion(funion, fsm);
 		}
 
 		for (State state : funion.getStates()) {

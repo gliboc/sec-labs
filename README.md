@@ -1,4 +1,4 @@
-# Rendu ArduinoML
+# ArduinoML Project
 
   * M2 IF, ENS Lyon
   * Guillaume Duboc, [email](mailto:guillaume.duboc@ens-lyon.fr)

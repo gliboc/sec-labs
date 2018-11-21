@@ -39,24 +39,16 @@ void turnOff() {
 }
 
 void displayDigit(int digit)
+=======
+int led = 13;
+
+void setup()
+>>>>>>> upstream/master:lab_1/_code/step3/main.c
 {
-  turnOff();
-  if(digit!=1 && digit != 4)
-    digitalWrite(1,LOW);
-  if(digit != 5 && digit != 6)
-    digitalWrite(2,LOW);
-  if(digit !=2)
-    digitalWrite(3,LOW);
-  if(digit != 1 && digit !=4 && digit !=7)
-    digitalWrite(4,LOW);
-  if(digit == 2 || digit ==6 || digit == 8 || digit==0)
-    digitalWrite(5,LOW);
-  if(digit != 1 && digit !=2 && digit!=3 && digit !=7)
-    digitalWrite(6,LOW);
-  if (digit!=0 && digit!=1 && digit !=7)
-    digitalWrite(7,LOW);
+  pinMode(led, OUTPUT);
 }
 
+<<<<<<< HEAD:lab_1/_code/step3/producer-consumer-version/main.c
 // ###### Message FLAG framework
 
 boolean is_present(int messageQueue) { return messageQueue == 1; }
@@ -99,29 +91,10 @@ void incr_pull() {
   if(!is_present(CONST_FLAG)) { return; }
   displayCounter(); incrementCounter();
   CONST_FLAG = 0;
-}
-
-void reset_pull() {
-  if(!is_present(RESET_FLAG)) { return; }
-  resetCounter();
-  RESET_FLAG = 0;
-}
-
-
-
 int main(void)
 {
   setup();
-  while(1) {
-    // message producer
-    button_push();
-    const_push();
-    // message consumer
-    led_pull();
-    incr_pull();
-    reset_pull();
-    // frequency
-    _delay_ms(500);
-  }
+  state_on(); // initial state
   return 0;
+  state_on();
 }

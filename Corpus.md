@@ -1,5 +1,35 @@
 # Bibliography Corpus for SEC 2018
 
+
+### Paper Presentation Expectations
+
+
+Prepare a 10 minutes presentation (hard limit), that addresses the following point for your selected paper:
+
+  - Context of the research;
+  - Research challenge addressed by the authors;
+  - Results obtained;
+  - Threats to validity
+  - Your analysis of the obtained result.
+
+Your critical analysis of the contribution (_e.g._, threats to validity and analysis) worths 50% of the final mark.
+
+### Chosen Papers:
+
+  - *How Many of All Bugs Do We Find?A Study of Static Bug Detectors* (Mathieu)
+  - *Energy efficiency across programming languages: how do energy, time, and memory relate?* (Simon)
+  - *Software performance self-adaptation through efficient model predictive control.* (Tristan)
+  - *Do Developers Read Compiler Error Messages?* (Tymofee)
+  - *Energy Efficiency across Programming Languages - How Does Energy, Time, and Memory Relate?* (Pierre-Étienne)
+  - *A static verification framework for message passing in Go using behavioural types* (Vincent)
+  - *Active Domain-Specific Languages: Making Every Mobile User a Modeller.* (Guillaume C.)
+  - *Metacasanova: an optimized meta-compiler for domain-specific languages* (Guillaume D.)
+  - *A Haskell compiler for signal transforms* (Lucas)
+  - *Rewriting a shallow DSL using a GHC compiler extension* (Peio)
+  - *Taming Undefined Behavior in LLVM* (Calvin)
+
+
+
 ## Int. Conf. on Programming Languages, Design and Implementation (PLDI, A*)
 
 ### 2018 Edition
@@ -118,7 +148,7 @@ TODO
   - Raja Ben Abdessalem, Annibale Panichella, Shiva Nejati, Lionel C. Briand, Thomas Stifter: _Testing autonomous cars for feature interaction failures using many-objective search_. 143-154.
   - Mukelabai Mukelabai, Damir Nesic, Salome Maro, Thorsten Berger, Jan-Philipp Steghöfer: _Tackling combinatorial explosion: a study of industrial needs and practices for analyzing highly configurable systems_. 155-166.
   - Dongjie He, Lian Li, Lei Wang, Hengjie Zheng, Guangwei Li, Jingling Xue: _Understanding and detecting evolution-induced compatibility issues in Android apps_. 167-177.
-  - Andrew Habib, Michael Pradel: _How many of all bugs do we find? a study of static bug detectors_. 317-328.
+  - *Andrew Habib, Michael Pradel: _How many of all bugs do we find? a study of static bug detectors_. 317-328.*
   - Hashim Sharif, Muhammad Abubakar, Ashish Gehani, Fareed Zaffar: _TRIMMER: application specialization for code debloating_. 329-339.
   - Dominik Helm, Florian Kübler, Michael Eichberg, Michael Reif, Mira Mezini: _A unified lattice model and framework for purity analyses_. 340-350
 
